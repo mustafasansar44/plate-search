@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Text, TextInput, TouchableOpacity, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { platesData } from '@/assets/data/Plate';
+import { plateCommentsDate } from '@/assets/data/PlateComment';
+import { Plate } from '@/types/Plate';
+import { PlateComment } from '@/types/PlateComment';
+import { Link } from 'expo-router';
 
-export default function TabOneScreen() {
+export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const lastPlates = [
-    { plate: '34 ABC 123', date: '2 saat önce' },
-    { plate: '06 XYZ 456', date: '5 saat önce' },
-    { plate: '35 DEF 789', date: '1 gün önce' },
-  ];
+  const [plates, setPlates] = useState<Plate[]>([...platesData]);
+  const [plateComments, setPlateComments] = useState<PlateComment[]>([...plateCommentsDate]);
 
-  const lastComments = [
-    { plate: '34 ABC 123', comment: 'Çok temiz bir araç', user: 'Kullanıcı1' },
-    { plate: '06 XYZ 456', comment: 'Bakımlı görünüyor', user: 'Kullanıcı2' },
-    { plate: '35 DEF 789', comment: 'Güzel bir araç', user: 'Kullanıcı3' },
-  ];
 
   return (
     <ScrollView 
       style={styles.container}
       showsVerticalScrollIndicator={false}
     >
+      <Link href="/comments" asChild>
+         <Text>
+          Go to Comments
+         </Text>
+      </Link>
+
       {/* Profile Statistics Section */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Profil İstatistikleri</Text>
@@ -33,10 +36,6 @@ export default function TabOneScreen() {
           <View style={styles.statItem}>
             <Text style={styles.statNumber}>200</Text>
             <Text style={styles.statLabel}>Toplam Yorum</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>300</Text>
-            <Text style={styles.statLabel}>Toplam Beğeni</Text>
           </View>
         </View>
       </View>
@@ -62,29 +61,14 @@ export default function TabOneScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Last 3 Plates Section */}
-      <View style={styles.listSection}>
-        <Text style={styles.subHeader}>Son Sorgulanan Plakalar</Text>
-        {lastPlates.map((plate, index) => (
-          <View key={index} style={styles.listItem}>
-            <View style={styles.listItemContent}>
-              <Text style={styles.listItemTitle}>{plate.plate}</Text>
-              <Text style={styles.listItemSubtitle}>{plate.date}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#007BFF" />
-          </View>
-        ))}
-      </View>
-
       {/* Last 3 Comments Section */}
       <View style={styles.listSection}>
         <Text style={styles.subHeader}>Son Yorumlar</Text>
-        {lastComments.map((comment, index) => (
+        {plateComments.map((comment, index) => (
           <View key={index} style={styles.listItem}>
             <View style={styles.listItemContent}>
-              <Text style={styles.listItemTitle}>{comment.plate}</Text>
-              <Text style={styles.listItemSubtitle}>{comment.comment}</Text>
-              <Text style={styles.listItemUser}>- {comment.user}</Text>
+              <Text style={styles.listItemTitle}>{comment.comment}</Text>
+              <Text style={styles.listItemUser}>- {comment.createdAt.toDateString()}</Text>
             </View>
             <Ionicons name="chatbubble-outline" size={20} color="#007BFF" />
           </View>
