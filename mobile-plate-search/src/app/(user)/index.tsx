@@ -1,29 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, TextInput, TouchableOpacity, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { platesData } from '@/assets/data/Plate';
 import { plateCommentsDate } from '@/assets/data/PlateComment';
 import { Plate } from '@/types/Plate';
 import { PlateComment } from '@/types/PlateComment';
-import { Link } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
+import CommentItem from '@/components/Comment';
 
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   const [plates, setPlates] = useState<Plate[]>([...platesData]);
-  const [plateComments, setPlateComments] = useState<PlateComment[]>([...plateCommentsDate]);
+  const [plateComments, setPlateComments] = useState<PlateComment[]>([]);
+  const [lastThreeComments, setLastThreeComments] = useState<PlateComment[]>([]);
 
+  useEffect(() => {
+    // Similar to ngOnInit, initialize the last three comments
+    const initializeComments = () => {
+      const sortedComments = [...plateCommentsDate].sort((a, b) => 
+        b.createdAt.getTime() - a.createdAt.getTime()
+      );
+      setLastThreeComments(sortedComments.slice(0, 3));
+      setPlateComments(sortedComments);
+    };
+
+    initializeComments();
+  }, []); // Empty dependency array means this runs once on component mount
+
+  const navigateToPlateDetails = (plateId: string) => {
+    const formattedPlate = plateId.replace(/\s+/g, '').toUpperCase();
+    router.push(`/${formattedPlate}`);
+  };
 
   return (
     <ScrollView 
       style={styles.container}
       showsVerticalScrollIndicator={false}
     >
-      <Link href="/comments" asChild>
-         <Text>
-          Go to Comments
-         </Text>
-      </Link>
+      <Stack.Screen options={{ title: 'Anasayfa' }} />
 
       {/* Profile Statistics Section */}
       <View style={styles.card}>
@@ -54,9 +70,11 @@ export default function HomeScreen() {
           />
         </View>
         <TouchableOpacity 
-          onPress={() => console.log('Search:', searchQuery)} 
-          style={styles.searchButton}
-        >
+          onPress={() => {
+            const formattedPlate = searchQuery.replace(/\s+/g, '').toUpperCase();
+            router.push(`/${formattedPlate}`);
+          }} 
+          style={styles.searchButton}>
           <Text style={styles.searchButtonText}>Plaka Sorgula</Text>
         </TouchableOpacity>
       </View>
@@ -64,14 +82,13 @@ export default function HomeScreen() {
       {/* Last 3 Comments Section */}
       <View style={styles.listSection}>
         <Text style={styles.subHeader}>Son Yorumlar</Text>
-        {plateComments.map((comment, index) => (
-          <View key={index} style={styles.listItem}>
-            <View style={styles.listItemContent}>
-              <Text style={styles.listItemTitle}>{comment.comment}</Text>
-              <Text style={styles.listItemUser}>- {comment.createdAt.toDateString()}</Text>
-            </View>
-            <Ionicons name="chatbubble-outline" size={20} color="#007BFF" />
-          </View>
+        {lastThreeComments.map((comment) => (
+          <TouchableOpacity 
+            key={comment.id} 
+            onPress={() => navigateToPlateDetails(comment.plateId)}
+          >
+            <CommentItem item={comment} />
+          </TouchableOpacity>
         ))}
       </View>
     </ScrollView>

@@ -6,5 +6,7 @@ export interface Plate extends BaseEntity {
 };
 
 
-// TODO: Gerçekten plaka sahibi mi doğrulamak lazım.
-// TODO: Telefonu kaydederken diğer ülkerein kodlarını seçerek önce entity'e kaydedelim. 
+
+
+
+

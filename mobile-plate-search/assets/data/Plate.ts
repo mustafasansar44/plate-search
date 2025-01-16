@@ -2,7 +2,7 @@ import { Plate } from "@/types/Plate";
 
 export const platesData: Plate[] = [
     {
-        id: "1",
+        id: "4",
         createdAt: new Date(),
         updatedAt: new Date(),
         isActive: true,
@@ -10,7 +10,7 @@ export const platesData: Plate[] = [
         userId: "2",
     },
     {
-        id: "2",
+        id: "6",
         createdAt: new Date(),
         updatedAt: new Date(),
         isActive: true,
@@ -18,7 +18,7 @@ export const platesData: Plate[] = [
         userId: "3",
     },
     {
-        id: "3",
+        id: "8",
         createdAt: new Date(),
         updatedAt: new Date(),
         isActive: true,

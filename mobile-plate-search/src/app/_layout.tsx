@@ -20,7 +20,6 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(user)',
 };
 
@@ -73,21 +72,7 @@ function RootLayoutNav() {
   const userScreenOptions = {
     title: 'Anasayfa',
     headerShown: false,
-    tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="dashboard" color={color} />,
-    headerRight: () => (
-      <Link href="/modal" asChild>
-        <Pressable>
-          {({ pressed }) => (
-            <FontAwesome
-              name="info-circle"
-              size={20}
-              color={Colors[colorScheme ?? 'light'].text}
-              style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-            />
-          )}
-        </Pressable>
-      </Link>
-    ),
+    tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="dashboard" color={color} />
   };
 
   const profileScreenOptions = {
@@ -102,14 +87,9 @@ function RootLayoutNav() {
       <Tabs screenOptions={tabScreenOptions}>
         <Tabs.Screen name="(user)" options={userScreenOptions} />
         <Tabs.Screen name="(profile)" options={profileScreenOptions} />
-        <Tabs.Screen name="modal" options={{ href: null}} />
         <Tabs.Screen name="+not-found" options={{ href: null}} />
 
       </Tabs>
     </ThemeProvider>
   );
 }
-/*
-        <Tabs.Screen name="modal" options={{ presentation: 'modal' }} />
-
-*/

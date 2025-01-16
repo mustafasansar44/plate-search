@@ -6,7 +6,7 @@ export const plateCommentsDate: PlateComment[] = [
         createdAt: new Date(),
         updatedAt: new Date(),
         isActive: true,
-        plateId: "1",
+        plateId: "8",
         comment: 'This is a comment1',
         commentOwnerUserId: "3"
     },
@@ -15,7 +15,7 @@ export const plateCommentsDate: PlateComment[] = [
         createdAt: new Date(),
         updatedAt: new Date(),
         isActive: true,
-        plateId: "2",
+        plateId: "8",
         comment: 'This is a comment2',
         commentOwnerUserId: "2"
     },
@@ -24,7 +24,7 @@ export const plateCommentsDate: PlateComment[] = [
         createdAt: new Date(),
         updatedAt: new Date(),
         isActive: true,
-        plateId: "3",
+        plateId: "6",
         comment: 'This is a comment3',
         commentOwnerUserId: "1"
     }
