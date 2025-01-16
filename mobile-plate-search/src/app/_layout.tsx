@@ -60,7 +60,6 @@ function RootLayoutNav() {
     return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
   }
 
-
   const colorScheme = useColorScheme();
 
   const tabScreenOptions = {
@@ -68,27 +67,32 @@ function RootLayoutNav() {
     headerShown: useClientOnlyValue(false, true),
   };
 
-
   const userScreenOptions = {
+    name:"(user)",
     title: 'Anasayfa',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="dashboard" color={color} />
   };
 
   const profileScreenOptions = {
+    name:"(profile)",
     title: 'Profile',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => <AntDesign name="profile" size={24} color="black" />,
+  };
+
+  const notFoundScreenOptions = {
+    name:"+not-found",
+    href: null
   };
 
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Tabs screenOptions={tabScreenOptions}>
-        <Tabs.Screen name="(user)" options={userScreenOptions} />
-        <Tabs.Screen name="(profile)" options={profileScreenOptions} />
-        <Tabs.Screen name="+not-found" options={{ href: null}} />
-
+        <Tabs.Screen name={userScreenOptions.name} options={userScreenOptions} />
+        <Tabs.Screen name={profileScreenOptions.name} options={profileScreenOptions} />
+        <Tabs.Screen name={notFoundScreenOptions.name} options={notFoundScreenOptions} />
       </Tabs>
     </ThemeProvider>
   );

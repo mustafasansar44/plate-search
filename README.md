@@ -1,5 +1,7 @@
-// TODO: Gerçekten plaka sahibi mi doğrulamak lazım.
-// TODO: Telefonu kaydederken diğer ülkerein kodlarını seçerek önce entity'e kaydedelim. 
-// TODO: Plaka için constraints ayarla
-// TODO: Search bugunu düzelt. ana sayfada search içerisi boş iken arama yapınca bug.
-// TODO: enter'a basınca oto plakayı arasın.
+mobile-plate-search projesine admin paneli desteği gelmesi gerekiyor. 
+Admin iken login olduğumuzda bazı ek feature'ler görmek istiyoruz.
+1- Admin, bir plaka aratarak [plate_name].tsx sayfasına girdiğinde, yorumları silebilmeli.
+2- Admin, bir plaka aratarak [plate_name].tsx sayfasına girdiğinde, yorumları güncelleyebilmeli.
+3- Admin, bir user'i banlayabilmeli.
+
+Admin olarak login olduğumuzda background rengi beyaz-gri tonlarında olmalı.

@@ -11,4 +11,5 @@ export interface User extends BaseEntity {
   tcno: string;
   phoneCode: string;
   phone: string;
+  role?: string;
 }

@@ -1,6 +1,6 @@
 import { PlateComment } from "@/types/PlateComment";
 
-export const plateCommentsDate: PlateComment[] = [
+export const plateCommentsData: PlateComment[] = [
     {
         id: "1",
         createdAt: new Date(),
