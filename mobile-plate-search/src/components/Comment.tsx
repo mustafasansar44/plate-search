@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PlateComment } from '@/types/PlateComment';
-import { useRouter } from 'expo-router';
+import { useRouter, useSegments } from 'expo-router';
 
 interface CommentProps {
     comments: PlateComment[];

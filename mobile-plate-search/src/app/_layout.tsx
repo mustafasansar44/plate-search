@@ -51,20 +51,9 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen 
-          name="(user)" 
-          options={{ 
-            headerShown: false,
-            title: 'User Dashboard'
-          }} 
-        />
-        <Stack.Screen 
-          name="+not-found" 
-          options={{ 
-            headerShown: true,
-            title: 'Page Not Found'
-          }} 
-        />
+        <Stack.Screen name="(admin)" options={{ headerShown: false, title: 'Admin Dashboard'}} />
+        <Stack.Screen name="(user)" options={{ headerShown: false, title: 'User Dashboard'}} />
+        <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Page Not Found' }} />
       </Stack>
     </ThemeProvider>
   );

@@ -5,3 +5,8 @@ Admin iken login olduğumuzda bazı ek feature'ler görmek istiyoruz.
 3- Admin, bir user'i banlayabilmeli.
 
 Admin olarak login olduğumuzda background rengi beyaz-gri tonlarında olmalı.
+
+
+// TODO: ImagePicker
+uselocalsearchparam vs global
+link vs .push

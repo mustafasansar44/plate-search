@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 
@@ -9,8 +9,12 @@ export default function UserLayout() {
   const colorScheme = useColorScheme();
 
   const tabScreenOptions = {
-    tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+    tabBarActiveTintColor: Colors.light.background,
+    tabBarInactiveTintColor: 'black',
     headerShown: false, 
+    tabBarStyle: {
+      backgroundColor: Colors.light.tint
+    } 
   };
 
   const mainScreenOptions = {
@@ -18,7 +22,7 @@ export default function UserLayout() {
     title: 'Anasayfa',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => (
-      <Ionicons name="home-outline" size={20} />
+      <FontAwesome name="dashboard" size={20} style={{ marginBottom: -3 }} color={color} />
     )
   };
 
@@ -27,7 +31,7 @@ export default function UserLayout() {
     title: 'Profile',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => (
-      <Ionicons name="people-outline" size={20} />
+      <AntDesign name="profile" size={24} color={color} />
     )
   };
 
