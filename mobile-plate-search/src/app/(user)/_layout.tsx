@@ -1,8 +1,42 @@
 import React from 'react';
-import { Stack } from 'expo-router';
+import { Tabs } from 'expo-router';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/components/useColorScheme';
 
 export default function UserLayout() {
+
+  const colorScheme = useColorScheme();
+
+  const tabScreenOptions = {
+    tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+    headerShown: false, 
+  };
+
+  const mainScreenOptions = {
+    name: "(main)",
+    title: 'Anasayfa',
+    headerShown: false,
+    tabBarIcon: ({ color }: { color: string }) => (
+      <FontAwesome name="dashboard" size={20} style={{ marginBottom: -3 }} color={color} />
+    )
+  };
+
+  const profileScreenOptions = {
+    name: "(profile)",
+    title: 'Profile',
+    headerShown: false,
+    tabBarIcon: ({ color }: { color: string }) => (
+      <AntDesign name="profile" size={24} color={color} />
+    )
+  };
+
   return (
-    <Stack />
+    <Tabs screenOptions={tabScreenOptions}>
+      <Tabs.Screen name={mainScreenOptions.name} options={mainScreenOptions} />
+      <Tabs.Screen name={profileScreenOptions.name} options={profileScreenOptions} />
+    </Tabs>
   );
+
 }
+
