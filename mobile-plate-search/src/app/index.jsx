@@ -1,22 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { Link } from 'expo-router';
-
+import { Link, Redirect } from 'expo-router';
 
 export default function index() {
     return (
-        <View>
-            <View>
-                <Link href="/(admin)" style={styles.customButton}>
-                    <Text>Go to admin screen!</Text>
-                </Link>
-            </View>
-            <View>
-                <Link href="/(user)" style={styles.customButton}>
-                    <Text>Go to user screen!</Text>
-                </Link>
-            </View>
-        </View>
+        <Redirect href="/(auth)/login" />
     )
 }
 
