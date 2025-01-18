@@ -25,7 +25,7 @@ export default function HomeScreen() {
 
   const navigateToPlateDetails = (plateId: string) => {
     const formattedPlate = plateId.replace(/\s+/g, '').toUpperCase();
-    router.push(`/${formattedPlate}`);
+    router.push(`(admin)/${formattedPlate}`);
   };
 
   return (
