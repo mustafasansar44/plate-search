@@ -10,6 +10,8 @@ export default function LoginScreen() {
   const router = useRouter()
   const segments = useSegments();
 
+  const path = '(user)/(profile)/profile'
+
   useEffect(() => {
     fetchSession()
     handleAuthStateChange
@@ -23,7 +25,7 @@ export default function LoginScreen() {
 
       if (session) {
         // Redirect on successful login
-        router.replace(`${segments[0]}/(main)`)
+        router.replace(`/${segments[0]}/(main)`)
       }
     })
 
@@ -37,13 +39,13 @@ export default function LoginScreen() {
     setSession(session)
     if (session) {
       // If session exists, redirect to home or profile
-      router.replace(`${segments[0]}/(main)`)
+      router.replace(`/${segments[0]}/(main)`)
     }
   }
   
   const handleLoginSuccess = (newSession: Session) => {
     setSession(newSession)
-    router.replace('(user)/(profile)/profile')
+    router.replace("/(user)/(profile)/profile")
   }
 
   return (
