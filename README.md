@@ -14,3 +14,5 @@ link vs .push
 // TODO: NotFound'u dene
 // register olurken loading varken loading'i göster
 // Pagination kullan.
+Dark tema gelmeli!
+Stil düzenlemeleri gelmeli

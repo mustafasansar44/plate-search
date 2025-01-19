@@ -1,10 +1,11 @@
 import React from 'react';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
+import { useAuth } from '@/providers/AuthProvider';
 
-export default function UserLayout() {
+export default function AdminLayout() {
 
   const colorScheme = useColorScheme();
 

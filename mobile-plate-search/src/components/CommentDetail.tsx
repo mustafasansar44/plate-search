@@ -9,12 +9,14 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useSegments } from 'expo-router';
 import { PlateComment } from '@/types/PlateComment';
+import AddPlateComment from './AddPlateComment';
 
 interface CommentDetailProps {
     comments: PlateComment[];
+    plate: string;
 }
 
-export const CommentDetail = ({ comments }: CommentDetailProps) => {
+export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
     const segment = useSegments();
 
     const renderCommentItem = ({ item }: { item: PlateComment }) => (
@@ -66,15 +68,19 @@ export const CommentDetail = ({ comments }: CommentDetailProps) => {
                 }
                 contentContainerStyle={styles.listContainer}
             />
+            <AddPlateComment plateName={plate} />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    /*
+        container: {
         flex: 1,
         backgroundColor: '#f8f9fa',
     },
+    
+    */
     headerTitle: {
         fontSize: 18,
         fontWeight: '700',
