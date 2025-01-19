@@ -11,19 +11,12 @@ export default function LoginScreen() {
   const segments = useSegments();
 
   useEffect(() => {
-    const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setSession(session)
-      console.log("Initial session setlendi!", session)
-
-      if (session) {
-        // If session exists, redirect to home or profile
-        router.replace(`${segments[0]}/(main)`)
-      }
-    }
-
     fetchSession()
+    handleAuthStateChange
 
+  }, [])
+
+  const handleAuthStateChange = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       console.log("Auth state changed, session:", session)
@@ -37,11 +30,19 @@ export default function LoginScreen() {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }
 
+  const fetchSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    setSession(session)
+    if (session) {
+      // If session exists, redirect to home or profile
+      router.replace(`${segments[0]}/(main)`)
+    }
+  }
+  
   const handleLoginSuccess = (newSession: Session) => {
     setSession(newSession)
-    console.log("Login successful, session set:", newSession)
     router.replace('(user)/(profile)/profile')
   }
 

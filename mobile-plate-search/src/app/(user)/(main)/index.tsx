@@ -1,95 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Text, TextInput, TouchableOpacity, Pressable, Image } from 'react-native';
-import { plateCommentsData } from '@/assets/data/PlateComment';
-import { PlateComment } from '@/types/PlateComment';
-import { Stack, useRouter } from 'expo-router';
-import { Comment } from '@/components/Comment';
-import ProfileStatistic from '@/components/ProfileStatistic';
-import PlateSearch from '@/components/PlateSearch';
+import React from 'react';
+import { View } from 'react-native';
+import { Stack } from 'expo-router';
+import HomeScreen from '@/components/screens/Home';
 
-export default function HomeScreen() {
-  const router = useRouter();
-
-  const [lastThreeComments, setLastThreeComments] = useState<PlateComment[]>([]);
-
-  useEffect(() => {
-    getLastComments();
-  }, []);
-
-  const getLastComments = () => {
-    const sortedComments = [...plateCommentsData].sort((a, b) => 
-      b.createdAt.getTime() - a.createdAt.getTime()
-    );
-    setLastThreeComments(sortedComments.slice(0, 3));
-  };
-
-  const navigateToPlateDetails = (plateId: string) => {
-    const formattedPlate = plateId.replace(/\s+/g, '').toUpperCase();
-    router.push(`(user)/${formattedPlate}`);
-  };
-
+export default function UserHomeScreen() {
   return (
-    <ScrollView 
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
+    <View>
       <Stack.Screen options={{ title: 'Anasayfa' }} />
-
-      <ProfileStatistic />
-      <PlateSearch />
-      <Comment comments={lastThreeComments} />
-      
-    </ScrollView>
+      <HomeScreen />
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f4f4f4',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-
-
-
-
-  listSection: {
-    marginBottom: 16,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  listItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  listItemContent: {
-    flex: 1,
-    marginRight: 10,
-  },
-  listItemTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  listItemSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  listItemUser: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 4,
-  },
-});
