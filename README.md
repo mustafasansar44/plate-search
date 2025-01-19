@@ -12,3 +12,5 @@ uselocalsearchparam vs global
 link vs .push
 
 // TODO: NotFound'u dene
+// register olurken loading varken loading'i göster
+// Pagination kullan.

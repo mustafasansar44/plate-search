@@ -2,20 +2,26 @@ import React, { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from '@rneui/themed'
+import { Session } from '@supabase/supabase-js'
 
-export default function Auth() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+interface AuthProps {
+  onLoginSuccess?: (session: Session) => void
+}
+
+export default function Auth({ onLoginSuccess }: AuthProps) {
+  const [email, setEmail] = useState('mustafasansar44@gmail.com')
+  const [password, setPassword] = useState('sansar2222')
   const [loading, setLoading] = useState(false)
 
   async function signInWithEmail() {
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     })
 
     if (error) Alert.alert(error.message)
+    if (data.session) onLoginSuccess?.(data.session)
     setLoading(false)
   }
 
