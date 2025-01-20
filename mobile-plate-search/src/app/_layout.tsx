@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import React from 'react';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
+import { AuthProvider } from '@/providers/AuthProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,12 +51,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(admin)" options={{ headerShown: false, title: 'Admin Dashboard'}} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false, title: 'Login Dashboard'}} />
-        <Stack.Screen name="(user)" options={{ headerShown: false, title: 'User Dashboard'}} />
-        <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Page Not Found' }} />
-      </Stack>
+        <Stack>
+          <Stack.Screen name="(admin)" options={{ headerShown: false, title: 'Admin Dashboard' }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false, title: 'Login Dashboard' }} />
+          <Stack.Screen name="(user)" options={{ headerShown: false, title: 'User Dashboard' }} />
+          <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Page Not Found' }} />
+        </Stack>
     </ThemeProvider>
   );
 }

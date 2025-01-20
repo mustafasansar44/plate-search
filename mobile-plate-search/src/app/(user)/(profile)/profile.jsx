@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '../../../lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -21,19 +21,11 @@ export default function ProfileScreen() {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      
-      if (error) {
-        // If there's an error during logout
-        Alert.alert('Çıkış Hatası', error.message);
-      } else {
-        // Successful logout, navigate to login screen
-        router.replace('/(auth)/login');
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-      Alert.alert('Çıkış Hatası', 'Bir hata oluştu. Lütfen tekrar deneyin.');
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      Alert.alert('Çıkış Hatası', error.message);
+    } else {
+      router.replace('/(auth)/login');
     }
   };
 

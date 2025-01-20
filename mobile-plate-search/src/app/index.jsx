@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { Link, Redirect } from 'expo-router';
 
@@ -7,6 +7,7 @@ export default function index() {
         <Redirect href="/(auth)/login" />
     )
 }
+
 
 styles = StyleSheet.create({
     customButton: {
