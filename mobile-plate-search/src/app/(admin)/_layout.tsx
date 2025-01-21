@@ -1,21 +1,22 @@
-import React from 'react';
-import { Redirect, Tabs } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Redirect, Tabs, useRouter } from 'expo-router';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuth } from '@/providers/AuthProvider';
+import { View } from '@/components/Themed';
+import { ActivityIndicator } from 'react-native';
 
 export default function AdminLayout() {
-
   const colorScheme = useColorScheme();
 
   const tabScreenOptions = {
-    tabBarActiveTintColor: Colors.light.background,
+    tabBarActiveTintColor: Colors[colorScheme ?? 'light'].background,
     tabBarInactiveTintColor: 'black',
-    headerShown: false, 
+    headerShown: false,
     tabBarStyle: {
-      backgroundColor: Colors.light.tint
-    } 
+      backgroundColor: Colors[colorScheme ?? 'light'].tint
+    }
   };
 
   const mainScreenOptions = {
@@ -42,6 +43,4 @@ export default function AdminLayout() {
       <Tabs.Screen name={profileScreenOptions.name} options={profileScreenOptions} />
     </Tabs>
   );
-
 }
-

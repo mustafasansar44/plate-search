@@ -1,8 +1,9 @@
 import React from 'react';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
+import { useAuth } from '@/providers/AuthProvider';
 
 export default function UserLayout() {
 
@@ -30,6 +31,13 @@ export default function UserLayout() {
       <Ionicons name="people-outline" size={20} />
     )
   };
+
+  const {session, loading} = useAuth();
+  if (!session) {
+    return(
+      <Redirect href="/(auth)/login" />
+    )
+  }
 
   return (
     <Tabs screenOptions={tabScreenOptions}>
