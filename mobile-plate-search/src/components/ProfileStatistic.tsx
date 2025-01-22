@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function ProfileStatistic() {
     return (
-        < View style={styles.card} >
+        <View style={styles.card} >
             <Text style={styles.sectionTitle}>Profil İstatistikleri</Text>
             <View style={styles.statsRow}>
                 <View style={styles.statItem}>

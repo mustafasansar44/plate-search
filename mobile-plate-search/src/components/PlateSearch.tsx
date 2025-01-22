@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#007BFF',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -104,5 +105,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 })

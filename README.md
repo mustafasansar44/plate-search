@@ -20,3 +20,4 @@ Stil düzenlemeleri gelmeli
 login register icon
 anasayfayı az düzelt
 üst tarafta şarj felan çıkmıyor.
+login sonrası index'e yönlendirmemeli! Direkt home sayfasına yönlendir
