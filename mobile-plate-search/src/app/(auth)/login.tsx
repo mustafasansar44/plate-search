@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native'
 import { supabase } from '../../lib/supabase'
 import { Button, Input } from '@rneui/themed'
-import { Link, Redirect, useRouter } from 'expo-router'
 import { useAuth } from '@/providers/AuthProvider'
 import AllPageLinks from '@/components/AllPageLinks'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('mustafasansar44@gmail.com')
   const [password, setPassword] = useState('sansar2222')
-  const { session, loading, setLoading, isAdmin } = useAuth()
+  const { loading, setLoading } = useAuth()
 
   async function signInWithEmail() {
     setLoading(true)

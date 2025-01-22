@@ -8,7 +8,6 @@ export default function UserHomeScreen() {
   return (
     <View>
       <Stack.Screen options={{ title: 'Anasayfa' }} />
-      <AllPageLinks />
       <HomeScreen />
     </View>
   );
