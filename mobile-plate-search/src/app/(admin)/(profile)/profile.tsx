@@ -2,33 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { supabase } from '@/lib/supabase';
+import Logout from '@/components/Logout';
 
 export default function AdminProfileScreen() {
-  const router = useRouter();
-  const [userEmail, setUserEmail] = useState('');
 
-  useEffect(() => {
-    // Fetch current user's email
-    const fetchUserEmail = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUserEmail(user.email || '');
-      }
-    };
-
-    fetchUserEmail();
-  }, []);
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert('Çıkış Hatası', error.message);
-    } else {
-      router.replace('/(auth)/login');
-    }
-  };
-
+  const [userEmail, setUserEmail] = useState('deneme@msn.com');
+  
   return (
     <ScrollView style={styles.container}>
       <Stack.Screen options={{ 
@@ -69,21 +48,7 @@ export default function AdminProfileScreen() {
           <Ionicons name="chevron-forward" size={24} color="#888" />
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.logoutButton} 
-          onPress={() => {
-            Alert.alert(
-              'Çıkış Yap',
-              'Çıkış yapmak istediğinizden emin misiniz?',
-              [
-                { text: 'İptal', style: 'cancel' },
-                { text: 'Çıkış Yap', style: 'destructive', onPress: handleLogout }
-              ]
-            );
-          }}
-        >
-          <Text style={styles.logoutText}>Çıkış Yap</Text>
-        </TouchableOpacity>
+        <Logout />
       </View>
     </ScrollView>
   );
@@ -157,16 +122,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  logoutButton: {
-    marginTop: 16,
-    backgroundColor: '#FF4D4D',
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  logoutText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+
 });

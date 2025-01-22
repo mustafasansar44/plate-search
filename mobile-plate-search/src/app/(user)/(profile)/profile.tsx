@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'rea
 import { Stack, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
+import Logout from '@/components/Logout';
 
 export default function ProfileScreen() {
-  const router = useRouter();
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState('deneme@msn.com');
 
   useEffect(() => {
     // Fetch current user's email
@@ -19,15 +19,6 @@ export default function ProfileScreen() {
 
     fetchUserEmail();
   }, []);
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert('Çıkış Hatası', error.message);
-    } else {
-      router.replace('/(auth)/login');
-    }
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -69,21 +60,7 @@ export default function ProfileScreen() {
           <Ionicons name="chevron-forward" size={24} color="#888" />
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.logoutButton} 
-          onPress={() => {
-            Alert.alert(
-              'Çıkış Yap',
-              'Çıkış yapmak istediğinizden emin misiniz?',
-              [
-                { text: 'İptal', style: 'cancel' },
-                { text: 'Çıkış Yap', style: 'destructive', onPress: handleLogout }
-              ]
-            );
-          }}
-        >
-          <Text style={styles.logoutText}>Çıkış Yap</Text>
-        </TouchableOpacity>
+        <Logout />
       </View>
     </ScrollView>
   );
@@ -156,17 +133,5 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     fontSize: 16,
     color: '#333',
-  },
-  logoutButton: {
-    marginTop: 16,
-    backgroundColor: '#FF4D4D',
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  logoutText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+  }
 });

@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider'
 import AllPageLinks from '@/components/AllPageLinks'
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('mustafasansar44@gmail.com')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('sansar2222')
   const { loading, setLoading } = useAuth()
 

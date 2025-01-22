@@ -8,6 +8,7 @@ interface AuthContextType {
   profile: any;
   isAdmin: boolean;
   setLoading: (loading: boolean) => void;
+  clearAllAuthData: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>({
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>({
   profile: null,
   isAdmin: false,
   setLoading: () => {},
+  clearAllAuthData: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -26,34 +28,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log('session alınıyor. (supabase.auth.getSession())', session);
-      setSession(session);
-      
+      console.log("fetchSession")
+      setLoading(true);
 
-      if(session){
-        //FETCH PROFİLE
-        const {data} = await supabase.from("profiles").select("*").eq("id", session.user.id).single();
-        setIsAdmin(data?.role === 'ADMIN');
-        setProfile(data || null);
+      const {data: { session }} = await supabase.auth.getSession();
+
+      if (session) {
+        const profileData = await getProfile(session.user.id)
+        console.log("PROFILE")
+        console.log(profileData)
+        setProfile(profileData || null);
+        setIsAdmin(profileData.role === 'ADMIN');
       }
-
+      setSession(session);
       setLoading(false);
     };
 
     fetchSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('session güncelleniyor. (supabase.auth.onAuthStateChange())', session);
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      if(session){
+        const profileData = await getProfile(session.user.id)
+        setProfile(profileData || null);
+        setIsAdmin(profileData.role === 'ADMIN');
+      }
       setSession(session);
-      setLoading(false);
     });
-
-    
-    return () => {
-      subscription.unsubscribe();
-    };
   }, []);
+
+  async function getProfile(id: string) {
+    console.log("id:", id);
+    const { data } = await supabase.from('profiles').select('*').eq('id', id).single();
+    console.log("data:");
+    console.log(data)
+    return data
+  }
+
+  function clearAllAuthData(){
+    setSession(null);
+    setLoading(true);
+    setProfile(null);
+    setIsAdmin(false);
+  }
 
   // Burada mesela isAdmin: isAdmin ama iki tarafında ismi aynı olduğu için isAdmin yazdık.
   // Birinci isAdmin değeri authProvider.isAdmin iken ikinci isAdmin değeri useState.isAdmin
@@ -63,6 +78,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
+
+
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
