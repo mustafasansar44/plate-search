@@ -3,6 +3,14 @@ import { Redirect, Tabs, useRouter } from 'expo-router'
 import React from 'react'
 
 export default function UserLoginLayout() {
+  const { session, isAdmin } = useAuth();
+  
+  if(isAdmin) {
+    return <Redirect href={'/(admin)/(main)'} />;
+  }
+  if (session) {
+    return <Redirect href={'/(user)/(main)'} />;
+  }
 
   return (
     <Tabs>

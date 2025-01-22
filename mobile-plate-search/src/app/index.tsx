@@ -1,36 +1,12 @@
-import { ActivityIndicator, Text } from 'react-native'
-import React from 'react'
-import { Link, Redirect } from 'expo-router';
-import { useAuth } from '@/providers/AuthProvider';
-import { View } from '@/components/Themed';
+import AllPageLinks from "@/components/AllPageLinks";
+import { useAuth } from "@/providers/AuthProvider";
+import { Redirect } from "expo-router";
 
-export default function index() {
-    return (
-        <View>
-            <Text>
-                Index Sayfası
-                <Link href="/(admin)/(main)"><Text>Admin Index</Text></Link>
-                <Link href="/(auth)"><Text>Auth Index</Text></Link>
-                <Link href="/(user)/(main)"><Text>User Index</Text></Link>
-            </Text>
-        </View>
-    )
+export default function RootIndex() {
+    
+    const {session, isAdmin, loading} = useAuth();
+    if(!session) return <Redirect href="/(auth)/login" />
+    if(isAdmin) return <Redirect href="/(admin)/(main)" />
+    if(session && !isAdmin) return <Redirect href="/(user)/(main)" />
 
 }
-
-/*
-
-    const { session, loading } = useAuth()
-    
-    if (loading) {
-        console.log("index - ActivityIndicator")
-        return (
-            <ActivityIndicator />
-        )
-    }
-
-    return (
-        <Redirect href={session ? '/(user)/(main)' : '/(auth)/login'} />
-    )  
-
-*/

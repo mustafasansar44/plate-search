@@ -9,6 +9,15 @@ import { ActivityIndicator } from 'react-native';
 
 export default function AdminLayout() {
   const colorScheme = useColorScheme();
+  const { session, isAdmin } = useAuth();
+  
+  if(!session) {
+    return <Redirect href={'/(auth)/login'} />;
+  }
+  if (!isAdmin) {
+    return <Redirect href={'/(user)/(main)'} />;
+  }
+  
 
   const tabScreenOptions = {
     tabBarActiveTintColor: Colors[colorScheme ?? 'light'].background,

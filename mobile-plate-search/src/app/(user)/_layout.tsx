@@ -7,7 +7,12 @@ import { useAuth } from '@/providers/AuthProvider';
 
 export default function UserLayout() {
 
+  const {session, isAdmin, loading} = useAuth();
   const colorScheme = useColorScheme();
+
+  if (!session) {
+    return <Redirect href="/(auth)/login" />
+  }
 
   const tabScreenOptions = {
     tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
@@ -31,13 +36,6 @@ export default function UserLayout() {
       <Ionicons name="people-outline" size={20} />
     )
   };
-
-  const {session, loading} = useAuth();
-  if (!session) {
-    return(
-      <Redirect href="/(auth)/login" />
-    )
-  }
 
   return (
     <Tabs screenOptions={tabScreenOptions}>

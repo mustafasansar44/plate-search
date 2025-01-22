@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase'
 import { Button, Input } from '@rneui/themed'
 import { Link, Redirect, useRouter } from 'expo-router'
 import { useAuth } from '@/providers/AuthProvider'
+import AllPageLinks from '@/components/AllPageLinks'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('mustafasansar44@gmail.com')
@@ -46,6 +47,7 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
+        <AllPageLinks />
         <Input
           label="Email"
           leftIcon={{ type: 'font-awesome', name: 'envelope' }}
