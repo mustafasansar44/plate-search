@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase'
 import { Button, Input } from '@rneui/themed'
 import { useAuth } from '@/providers/AuthProvider'
 import AllPageLinks from '@/components/AllPageLinks'
+import { authService } from '@/services/authService'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('')
@@ -12,28 +13,13 @@ export default function LoginScreen() {
 
   async function signInWithEmail() {
     setLoading(true)
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    })
-
-    if (error) Alert.alert(error.message)
-    console.log("Login Olundu." + data.session)
+    await authService.signInWithEmail(email, password)
     setLoading(false)
   }
 
   async function signUpWithEmail() {
     setLoading(true)
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    })
-
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
+    await authService.signUpWithEmail(email, password)
     setLoading(false)
   }
 
