@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import React from 'react';
 import { useColorScheme } from '@/components/useColorScheme';
 import { AuthProvider } from '@/providers/AuthProvider';
+import { StatusBar } from 'expo-status-bar';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -57,6 +58,7 @@ function RootLayoutNav() {
           <Stack.Screen name="(user)" options={{ headerShown: false, title: 'User Dashboard' }} />
           <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Page Not Found' }} />
         </Stack>
+        <StatusBar style="auto" />
       </AuthProvider>
     </ThemeProvider>
   );
