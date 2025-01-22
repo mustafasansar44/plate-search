@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Redirect, Tabs, useRouter } from 'expo-router';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuth } from '@/providers/AuthProvider';
-import { View } from '@/components/Themed';
-import { ActivityIndicator } from 'react-native';
 
 export default function AdminLayout() {
   const colorScheme = useColorScheme();
