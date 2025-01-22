@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native'
-import { supabase } from '../../lib/supabase'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { Button, Input } from '@rneui/themed'
 import { useAuth } from '@/providers/AuthProvider'
-import AllPageLinks from '@/components/AllPageLinks'
 import { authService } from '@/services/authService'
 
 export default function LoginScreen() {
@@ -32,7 +30,6 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <AllPageLinks />
         <Input
           label="Email"
           leftIcon={{ type: 'font-awesome', name: 'envelope' }}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Tabs, useRouter } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';

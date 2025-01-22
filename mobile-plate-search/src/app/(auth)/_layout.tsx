@@ -1,5 +1,5 @@
 import { useAuth } from '@/providers/AuthProvider'
-import { Redirect, Tabs, useRouter } from 'expo-router'
+import { Redirect, Tabs } from 'expo-router'
 import React from 'react'
 
 export default function UserLoginLayout() {

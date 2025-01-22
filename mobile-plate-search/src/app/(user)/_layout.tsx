@@ -1,13 +1,13 @@
 import React from 'react';
 import { Redirect, Tabs } from 'expo-router';
-import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuth } from '@/providers/AuthProvider';
 
 export default function UserLayout() {
 
-  const {session, isAdmin, loading} = useAuth();
+  const {session} = useAuth();
   const colorScheme = useColorScheme();
 
   if (!session) {
