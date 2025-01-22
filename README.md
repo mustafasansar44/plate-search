@@ -16,3 +16,7 @@ link vs .push
 // Pagination kullan.
 Dark tema gelmeli!
 Stil düzenlemeleri gelmeli
+
+login register icon
+anasayfayı az düzelt
+üst tarafta şarj felan çıkmıyor.

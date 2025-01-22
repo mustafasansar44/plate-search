@@ -5,10 +5,10 @@ import HomeScreen from '@/components/screens/Home';
 
 export default function AdminHomeScreen() {
   return (
-    <View>
+    <>
       <Stack.Screen options={{ title: 'Anasayfa' }} />
       <HomeScreen />
-    </View>
+    </>
   );
 }
 

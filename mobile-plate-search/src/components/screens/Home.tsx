@@ -31,17 +31,13 @@ export default function HomeScreen() {
   )
 }
 
-/*
-
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f4f4',
     paddingHorizontal: 16,
     paddingTop: 16,
   },
-
-*/
-const styles = StyleSheet.create({
   listSection: {
     marginBottom: 16,
     backgroundColor: 'white',

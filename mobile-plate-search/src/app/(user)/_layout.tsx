@@ -14,9 +14,16 @@ export default function UserLayout() {
     return <Redirect href="/(auth)/login" />
   }
 
+  
   const tabScreenOptions = {
     tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-    headerShown: false, 
+    tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
+    headerShown: false,
+    tabBarStyle: {
+      backgroundColor: Colors[colorScheme ?? 'light'].background,
+      borderTopWidth: 0.5,
+      borderTopColor: Colors[colorScheme ?? 'light'].tabIconDefault,
+    },
   };
 
   const mainScreenOptions = {
@@ -45,4 +52,3 @@ export default function UserLayout() {
   );
 
 }
-

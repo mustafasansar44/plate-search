@@ -28,7 +28,7 @@ export default function AdminLayout() {
 
   const mainScreenOptions = {
     name: "(main)",
-    title: 'Anasayfa',
+    title: 'Home',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => (
       <FontAwesome name="dashboard" size={20} style={{ marginBottom: -3 }} color={color} />
