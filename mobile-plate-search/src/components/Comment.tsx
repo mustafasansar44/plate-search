@@ -4,11 +4,12 @@ import {
     Text, 
     StyleSheet, 
     TouchableOpacity,
-    FlatList
+    FlatList,
+    Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PlateComment } from '@/types/PlateComment';
-import { useRouter, useSegments } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 interface CommentProps {
     comments: PlateComment[];
@@ -28,28 +29,15 @@ export const Comment = ({ comments }: CommentProps) => {
             style={styles.commentTouchable}
         >
             <View style={styles.commentContainer}>
-                <View style={styles.avatarContainer}>
-                    <Ionicons
-                        name="person-circle"
-                        size={50}
-                        color="#888"
-                    />
-                </View>
-
                 <View style={styles.commentContent}>
-                    <View style={styles.commentHeader}>
-                        <Text style={styles.userName}>
-                            {item.comment_owner_user_id || 'Anonymous'}
-                        </Text>
-                        <Text style={styles.timestamp}>
-                            {item.created_at.toLocaleString()}
+                    <View style={styles.plateSection}>
+                        <Ionicons name="car-outline" size={14} color="#007BFF" />
+                        <Text style={styles.plateName}>
+                            {' '}{item.plate_id}
                         </Text>
                     </View>
-                    <Text style={styles.commentText}>
+                    <Text style={styles.commentText} numberOfLines={1}>
                         {item.comment}
-                    </Text>
-                    <Text style={styles.plateName}>
-                        Plaka: {item.plate_id}
                     </Text>
                 </View>
             </View>
@@ -58,14 +46,23 @@ export const Comment = ({ comments }: CommentProps) => {
 
     return (
         <View style={styles.listSection}>
-            <Text style={styles.subHeader}>Son Yorumlar</Text>
+            <View style={styles.headerContainer}>
+                <Text style={styles.subHeader}>Son Yorumlar</Text>
+                <TouchableOpacity>
+                    <Text style={styles.seeAllText}>Tümünü Gör</Text>
+                </TouchableOpacity>
+            </View>
             <FlatList
                 data={comments}
                 renderItem={renderCommentItem}
                 keyExtractor={(item) => item.id.toString()}
                 ListEmptyComponent={
-                    <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
+                    <View style={styles.emptyContainer}>
+                        <Ionicons name="chatbox-outline" size={50} color="#CCC" />
+                        <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
+                    </View>
                 }
+                showsVerticalScrollIndicator={false}
             />
         </View>
     );
@@ -73,67 +70,70 @@ export const Comment = ({ comments }: CommentProps) => {
 
 const styles = StyleSheet.create({
     listSection: {
-        marginBottom: 16,
         backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 16,
+        borderRadius: 8,
+        padding: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 4,
     },
     subHeader: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
-        marginBottom: 12,
         color: '#333',
     },
+    seeAllText: {
+        color: '#007BFF',
+        fontSize: 10,
+    },
     commentTouchable: {
-        marginBottom: 12,
+        marginBottom: 4,
     },
     commentContainer: {
         flexDirection: 'row',
-        backgroundColor: '#f9f9f9',
-        borderRadius: 12,
-        padding: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    avatarContainer: {
-        marginRight: 16,
-        justifyContent: 'center',
+        backgroundColor: '#F5F5F5',
+        borderRadius: 6,
+        padding: 8,
+        alignItems: 'center',
+        height: 40,
     },
     commentContent: {
         flex: 1,
+        justifyContent: 'center',
     },
-    commentHeader: {
+    plateSection: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 8,
-    },
-    userName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    timestamp: {
-        fontSize: 12,
-        color: '#888',
-    },
-    commentText: {
-        fontSize: 14,
-        color: '#333',
-        marginBottom: 8,
+        alignItems: 'center',
+        marginBottom: 2,
     },
     plateName: {
         fontSize: 12,
         color: '#007BFF',
         fontWeight: 'bold',
     },
+    commentText: {
+        fontSize: 10,
+        color: '#555',
+        lineHeight: 12,
+    },
+    emptyContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 8,
+    },
     emptyText: {
         textAlign: 'center',
         color: '#888',
-        fontSize: 14,
-        marginTop: 16,
+        fontSize: 12,
+        marginTop: 4,
     },
 });
 

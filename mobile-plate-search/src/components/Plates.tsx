@@ -15,22 +15,21 @@ interface PlateProps {
 export const Plates = ({ plates }: PlateProps) => {
 
 const renderItem = ({ item }: { item: Plate }) => (
-  <View style={styles.commentContainer}>
-    <View style={styles.commentContent}>
-      <View style={styles.commentHeader}>
-        <Text style={styles.userName}>{item.plate_no || '-'}</Text>
-        <Text style={styles.timestamp}>
-          {item?.created_at?.toLocaleString()} 
-        </Text>
+  <View style={styles.plateContainer}>
+    <View style={styles.plateBlueSection} />
+    <View style={styles.plateContent}>
+      <Text style={styles.plateNumber}>{item.plate_no || '-'}</Text>
+      <View style={styles.plateDetails}>
+        <Text style={styles.plateStatus}>{item.is_active}</Text>
+        <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
       </View>
-      <Text style={styles.commentText}>{item.is_active}</Text>
     </View>
   </View>
 );
 
     return (
         <View style={styles.listSection}>
-            <Text style={styles.subHeader}>Son Yorumlar</Text>
+            <Text style={styles.subHeader}>Son Plakalar</Text>
             <FlatList
                 data={plates}
                 renderItem={renderItem}
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     listSection: {
         marginBottom: 16,
         backgroundColor: 'white',
-        borderRadius: 12,
+        borderRadius: 8,
         padding: 16,
     },
     subHeader: {
@@ -56,45 +55,72 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         color: '#333',
     },
-    commentTouchable: {
-        marginBottom: 12,
-    },
-    commentContainer: {
+    plateContainer: {
+        backgroundColor: '#FFFFFF', 
+        borderWidth: 1,
+        borderColor: '#000000',
+        borderRadius: 4,
+        marginBottom: 8,
         flexDirection: 'row',
-        backgroundColor: '#f9f9f9',
-        borderRadius: 12,
-        padding: 16,
+        alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowRadius: 2,
+        elevation: 2,
+        position: 'relative',
     },
-    avatarContainer: {
-        marginRight: 16,
-        justifyContent: 'center',
+    plateBlueSection: {
+        width: '10%',
+        backgroundColor: 'blue',
+        height: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 0,
     },
-    commentContent: {
+    plateContent: {
         flex: 1,
+        marginLeft: 8,
     },
-    commentHeader: {
+    plateHeader: {
+        position: 'absolute',
+        top: -8,
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 4,
+        zIndex: 1,
+    },
+    plateHeaderText: {
+        fontSize: 8,
+        color: '#333',
+        fontWeight: 'bold',
+    },
+    plateNumber: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000',
+        letterSpacing: 2,
+        textAlign: 'center',
+        marginVertical: 4,
+        fontFamily: 'monospace',
+    },
+    plateDetails: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 8,
+        width: '100%',
+        paddingHorizontal: 8,
+        marginTop: 4,
+        borderTopWidth: 1,
+        borderTopColor: '#E0E0E0',
+        paddingTop: 4,
     },
-    userName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    timestamp: {
+    plateStatus: {
         fontSize: 12,
-        color: '#888',
+        color: '#666',
+        fontWeight: 'bold',
     },
-    commentText: {
-        fontSize: 14,
-        color: '#333',
-        marginBottom: 8,
+    plateTimestamp: {
+        fontSize: 10,
+        color: '#888',
     },
     emptyText: {
         textAlign: 'center',
