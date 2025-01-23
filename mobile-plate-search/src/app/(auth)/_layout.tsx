@@ -6,12 +6,16 @@ import { Redirect, Tabs } from 'expo-router'
 import React from 'react'
 
 export default function UserLoginLayout() {
-  const { session } = useAuth();
+  const { session, isAdmin } = useAuth();
   const colorScheme = getColorScheme();
 
-  if (session) {
-    return <Redirect href={'/'} />;
+  if (session && !isAdmin) {
+    return <Redirect href={'/(user)/(main)'} />;
   }
+  if (isAdmin) {
+    return <Redirect href={'/(admin)/(main)'} />;
+  }
+
 
   const tabScreenOptions = {
     tabBarActiveTintColor: Colors[colorScheme].background,

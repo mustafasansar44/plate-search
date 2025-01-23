@@ -1,3 +1,11 @@
+STEP 1
+src/app folder içeriğindeki her bir .tsx dosyasını detaylı analiz et. Hatalar ya da performans iyileştirmeleri önerileri varsa bilgi ver.
+
+
+STEP 1 BİTTİ
+
+
+
 mobile-plate-search projesine admin paneli desteği gelmesi gerekiyor. 
 Admin iken login olduğumuzda bazı ek feature'ler görmek istiyoruz.
 1- Admin, bir plaka aratarak [plate_name].tsx sayfasına girdiğinde, yorumları silebilmeli.

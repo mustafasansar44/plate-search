@@ -5,19 +5,13 @@ import { useAuth } from '@/providers/AuthProvider'
 import { authService } from '@/services/authService'
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('mustafasansar01@gmail.com')
   const [password, setPassword] = useState('sansar2222')
   const { loading, setLoading } = useAuth()
 
   async function signInWithEmail() {
     setLoading(true)
     await authService.signInWithEmail(email, password)
-    setLoading(false)
-  }
-
-  async function signUpWithEmail() {
-    setLoading(true)
-    await authService.signUpWithEmail(email, password)
     setLoading(false)
   }
 
@@ -52,9 +46,6 @@ export default function LoginScreen() {
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
       </View>
     </View>
   )

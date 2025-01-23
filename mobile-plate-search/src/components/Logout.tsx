@@ -6,17 +6,15 @@ import { useAuth } from '@/providers/AuthProvider';
 
 export default function Logout() {
     const router = useRouter();
-    const { clearAllAuthData } = useAuth();
 
     const handleLogout = async () => {
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-          Alert.alert('Çıkış Hatası', error.message);
-        } else {
-          clearAllAuthData();
-          router.replace('/(auth)/login');
-        }
-      };
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        Alert.alert('Çıkış Hatası', error.message);
+      } else {
+        router.replace('/(auth)/login');
+      }
+    };
 
 
     return (
@@ -28,7 +26,7 @@ export default function Logout() {
                     'Çıkış yapmak istediğinizden emin misiniz?',
                     [
                         { text: 'İptal', style: 'cancel' },
-                        { text: 'Çıkış Yap', style: 'destructive', onPress: handleLogout }
+                        { text: 'Çıkış Yap ()', style: 'destructive', onPress: handleLogout }
                     ]
                 );
             }}

@@ -14,7 +14,6 @@ export const authService = {
         return { success: false, error }
       }
 
-      console.log("Login Olundu." + data.session)
       return { success: true, data }
     } catch (error) {
       Alert.alert('An unexpected error occurred')

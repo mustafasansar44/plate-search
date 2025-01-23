@@ -48,9 +48,9 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
+  // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}> 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <AuthProvider>
         <Stack>
           <Stack.Screen name="(admin)" options={{ headerShown: false, title: 'Admin Dashboard' }} />

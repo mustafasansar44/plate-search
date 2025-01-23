@@ -16,14 +16,15 @@ export default function AdminLayout() {
     return <Redirect href={'/(user)/(main)'} />;
   }
   
-
   const tabScreenOptions = {
-    tabBarActiveTintColor: Colors[colorScheme ?? 'light'].background,
-    tabBarInactiveTintColor: 'black',
+    tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+    tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
     headerShown: false,
     tabBarStyle: {
-      backgroundColor: Colors[colorScheme ?? 'light'].tint
-    }
+      backgroundColor: Colors[colorScheme ?? 'light'].background,
+      borderTopWidth: 0.5,
+      borderTopColor: Colors[colorScheme ?? 'light'].tabIconDefault,
+    },
   };
 
   const mainScreenOptions = {

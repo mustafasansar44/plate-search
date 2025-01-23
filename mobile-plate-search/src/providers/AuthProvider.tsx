@@ -8,7 +8,6 @@ interface AuthContextType {
   profile: any;
   isAdmin: boolean;
   setLoading: (loading: boolean) => void;
-  clearAllAuthData: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>({
@@ -17,7 +16,6 @@ const AuthContext = createContext<AuthContextType | undefined>({
   profile: null,
   isAdmin: false,
   setLoading: () => {},
-  clearAllAuthData: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -26,60 +24,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  async function getProfile(id: string) {
+    const { data } = await supabase.from('profiles').select('*').eq('id', id).single();
+    return data;
+  }
+
   useEffect(() => {
     const fetchSession = async () => {
-      console.log("fetchSession")
       setLoading(true);
-
-      const {data: { session }} = await supabase.auth.getSession();
-
-      if (session) {
-        const profileData = await getProfile(session.user.id)
-        console.log("PROFILE")
-        console.log(profileData)
-        setProfile(profileData || null);
-        setIsAdmin(profileData.role === 'ADMIN');
+      try {
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        
+        if (currentSession) {
+          const profileData = await getProfile(currentSession.user.id);
+          setProfile(profileData || null);
+          setIsAdmin(profileData?.role === 'ADMIN');
+          setSession(currentSession);
+        } else {
+          setProfile(null);
+          setIsAdmin(false);
+          setSession(null);
+        }
+      } catch (error) {
+        console.error('Error fetching session:', error);
+      } finally {
+        setLoading(false);
       }
-      setSession(session);
-      setLoading(false);
     };
 
     fetchSession();
-    supabase.auth.onAuthStateChange(async (_event, session) => {
-      if(session){
-        const profileData = await getProfile(session.user.id)
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+      if (newSession) {
+        const profileData = await getProfile(newSession.user.id);
         setProfile(profileData || null);
-        setIsAdmin(profileData.role === 'ADMIN');
+        setIsAdmin(profileData?.role === 'ADMIN');
+        setSession(newSession);
+      } else {
+        setProfile(null);
+        setIsAdmin(false);
+        setSession(null);
       }
-      setSession(session);
     });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
-  async function getProfile(id: string) {
-    console.log("id:", id);
-    const { data } = await supabase.from('profiles').select('*').eq('id', id).single();
-    console.log("data:");
-    console.log(data)
-    return data
-  }
-
-  function clearAllAuthData(){
-    setSession(null);
-    setLoading(true);
-    setProfile(null);
-    setIsAdmin(false);
-  }
-
-  // Burada mesela isAdmin: isAdmin ama iki tarafında ismi aynı olduğu için isAdmin yazdık.
-  // Birinci isAdmin değeri authProvider.isAdmin iken ikinci isAdmin değeri useState.isAdmin
   return (
     <AuthContext.Provider value={{ session, loading, profile, isAdmin, setLoading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
