@@ -24,7 +24,7 @@ export const Comment = ({ comments }: CommentProps) => {
     const renderCommentItem = ({ item }: { item: PlateComment }) => (
         <TouchableOpacity
             key={item.id}
-            onPress={() => navigateToPlateDetails(item.plateId)}
+            onPress={() => navigateToPlateDetails(item.plate_id)}
             style={styles.commentTouchable}
         >
             <View style={styles.commentContainer}>
@@ -39,17 +39,17 @@ export const Comment = ({ comments }: CommentProps) => {
                 <View style={styles.commentContent}>
                     <View style={styles.commentHeader}>
                         <Text style={styles.userName}>
-                            {item.commentOwnerUserId || 'Anonymous'}
+                            {item.comment_owner_user_id || 'Anonymous'}
                         </Text>
                         <Text style={styles.timestamp}>
-                            {item.createdAt.toLocaleString()}
+                            {item.created_at.toLocaleString()}
                         </Text>
                     </View>
                     <Text style={styles.commentText}>
                         {item.comment}
                     </Text>
                     <Text style={styles.plateName}>
-                        Plaka: {item.plateId}
+                        Plaka: {item.plate_id}
                     </Text>
                 </View>
             </View>

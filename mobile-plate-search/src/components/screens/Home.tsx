@@ -6,19 +6,38 @@ import { Stack } from 'expo-router';
 import { Comment } from '@/components/Comment';
 import ProfileStatistic from '@/components/ProfileStatistic';
 import PlateSearch from '@/components/PlateSearch';
+import { Plates } from '../Plates';
+import { getPlatesForUser } from '@/services/plateService';
+import { useAuth } from '@/providers/AuthProvider';
+import { Plate } from '@/types/Plate';
 
 export default function HomeScreen() {
+  const { session, profile, isAdmin } = useAuth()
   const [lastThreeComments, setLastThreeComments] = useState<PlateComment[]>([]);
-
+  const [plates, setPlates] = useState<Plate[]>([]);
   useEffect(() => {
     getLastComments();
+    const user = session?.user;
+
+    if (user) {
+      const fetchPlates = async () => {
+        const fetchedPlates: Plate[] = await getPlatesForUser(user.id)
+        if (fetchedPlates) {
+          setPlates(fetchedPlates)
+        }
+      };
+      fetchPlates();
+    }
   }, []);
 
   const getLastComments = () => {
-    const sortedComments = [...plateCommentsData].sort((a, b) => 
-      b.createdAt.getTime() - a.createdAt.getTime()
+    /*
+        const sortedComments = [...plateCommentsData].sort((a, b) => 
+      b.created_at.getTime() - a.created_at.getTime()
     );
     setLastThreeComments(sortedComments.slice(0, 3));
+    
+    */
   };
 
   return (
@@ -26,6 +45,7 @@ export default function HomeScreen() {
       <Stack.Screen options={{ title: 'Anasayfa' }} />
       <ProfileStatistic />
       <PlateSearch />
+      <Plates plates={plates} />
       <Comment comments={lastThreeComments} />
     </View>
   )

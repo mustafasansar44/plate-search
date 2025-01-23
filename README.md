@@ -25,7 +25,13 @@ link vs .push
 Dark tema gelmeli!
 Stil düzenlemeleri gelmeli
 
+todo: Kullanıcı kayıt olurken plakayı da kayıt etmeli ya da plakasız kayıt olmalı!
+kullanıcı bilgilerini public yaparsa direkt görünecek, protected yaparsa istek, private yaparsa kimseye görünmemeli.
+
 login register icon
 anasayfayı az düzelt
 üst tarafta şarj felan çıkmıyor.
 login sonrası index'e yönlendirmemeli! Direkt home sayfasına yönlendir
+Plaka değiştiğinde kişi bilgileri de değişecek. 
+dünyada yorumlanan son 5 plakayı getirt.
+ScreenView gibi yap home'yi

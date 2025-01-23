@@ -1,8 +1,9 @@
 import { BaseEntity } from "./BaseEntity";
 
 export interface Plate extends BaseEntity {
-    plateNo: string;
-    userId: string;
+    plate_no: string;
+    user_id: string;
+    image?: string; // TODO: Burayı düzelt
 };
 
 

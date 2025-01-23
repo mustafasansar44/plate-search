@@ -1,7 +1,7 @@
 import { BaseEntity } from "./BaseEntity";
 
 export interface PlateComment extends BaseEntity {
-    plateId: string;
+    plate_id: string;
     comment: string;
-    commentOwnerUserId: string;
+    comment_owner_user_id: string;
 };

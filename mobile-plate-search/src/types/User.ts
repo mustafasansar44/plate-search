@@ -3,13 +3,13 @@ import { Plate } from './Plate';
 import { PlateComment } from './PlateComment';
 
 export interface User extends BaseEntity {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   username: string;
   password: string;
   email: string;
   tcno: string;
-  phoneCode: string;
+  phone_code: string;
   phone: string;
   role?: string;
 }

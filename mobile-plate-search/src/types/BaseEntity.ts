@@ -1,6 +1,6 @@
 export interface BaseEntity {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  isActive: boolean;
+  created_at: Date;
+  updated_at: Date;
+  is_active: boolean;
 }
