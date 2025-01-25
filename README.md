@@ -1,7 +1,9 @@
 STEP 1
-src/app folder içeriğindeki her bir .tsx dosyasını detaylı analiz et. Hatalar ya da performans iyileştirmeleri önerileri varsa bilgi ver.
+1- Genel bir servis sınıfı yaz. Bu servis sınıfına supabase icin CRUD operasyonları yapmak için yazıyoruz. Daha sonra bu servisi 
+TABLE_NAME, QUERY, EQUAL gibi 
+bu parametrelere göre çağıracağız. Mesela servisin adı DenemeService olsun. 
 
-
+Yani özetle, genel, dinamik bir supabase CRUD servisi yazmak istiyoruz.
 STEP 1 BİTTİ
 
 
@@ -19,9 +21,9 @@ Admin olarak login olduğumuzda background rengi beyaz-gri tonlarında olmalı.
 uselocalsearchparam vs global
 link vs .push
 
-// TODO: NotFound'u dene
-// register olurken loading varken loading'i göster
-// Pagination kullan.
+TODO: NotFound'u dene
+register olurken loading varken loading'i göster
+Pagination kullan.
 Dark tema gelmeli!
 Stil düzenlemeleri gelmeli
 
@@ -35,3 +37,6 @@ login sonrası index'e yönlendirmemeli! Direkt home sayfasına yönlendir
 Plaka değiştiğinde kişi bilgileri de değişecek. 
 dünyada yorumlanan son 5 plakayı getirt.
 ScreenView gibi yap home'yi
+başta index'ten başlıyor. Onu düzeltdirekt login'e atsın.
+database tarafında mesela username'a constraints'ler ekle
+plakayı aratanlar count

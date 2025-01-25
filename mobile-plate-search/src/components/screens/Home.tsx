@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { plateCommentsData } from '@/assets/data/PlateComment';
 import { PlateComment } from '@/types/PlateComment';
 import { Stack } from 'expo-router';
 import { Comment } from '@/components/Comment';
 import ProfileStatistic from '@/components/ProfileStatistic';
 import PlateSearch from '@/components/PlateSearch';
 import { Plates } from '../Plates';
-import { getPlatesForUser } from '@/services/plateService';
 import { useAuth } from '@/providers/AuthProvider';
 import { Plate } from '@/types/Plate';
 
@@ -26,7 +24,7 @@ export default function HomeScreen() {
 
     if (user) {
       const fetchPlates = async () => {
-        const fetchedPlates: Plate[] = await getPlatesForUser(user.id)
+        const fetchedPlates: Plate[] = [] // await getPlatesForUser(user.id)
         if (fetchedPlates) {
           setPlates(fetchedPlates)
         }
@@ -48,7 +46,6 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Anasayfa' }} />
-      <ProfileStatistic />
       <PlateSearch />
       <Plates plates={plates} />
       <Comment comments={lastThreeComments} />

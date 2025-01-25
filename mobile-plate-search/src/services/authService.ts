@@ -1,3 +1,4 @@
+import { UserRegisterDto } from '@/types/dtos/UserRegisterDto'
 import { supabase } from '../lib/supabase'
 import { Alert } from 'react-native'
 
@@ -20,30 +21,18 @@ export const authService = {
       return { success: false, error }
     }
   },
+  async registerUser(user: UserRegisterDto) {
+    console.log("SA")
+    console.log(user)
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email: user.email,
+      password: user.password,
+    })
+    console.log(error)
 
-  async signUpWithEmail(email: string, password: string) {
-    try {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-      })
-
-      if (error) {
-        Alert.alert(error.message)
-        return { success: false, error }
-      }
-
-      if (!session) {
-        Alert.alert('Please check your inbox for email verification!')
-      }
-
-      return { success: true, session }
-    } catch (error) {
-      Alert.alert('An unexpected error occurred')
-      return { success: false, error }
-    }
   }
+  
 }
