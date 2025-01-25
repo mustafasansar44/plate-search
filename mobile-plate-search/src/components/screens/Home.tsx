@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { PlateComment } from '@/types/PlateComment';
 import { Stack } from 'expo-router';
 import { Comment } from '@/components/Comment';
-import ProfileStatistic from '@/components/ProfileStatistic';
 import PlateSearch from '@/components/PlateSearch';
 import { Plates } from '../Plates';
 import { useAuth } from '@/providers/AuthProvider';
 import { Plate } from '@/types/Plate';
+import AddPlate from '../AddPlate';
 
 export default function HomeScreen() {
   const { session, profile, isAdmin } = useAuth()
@@ -17,6 +17,8 @@ export default function HomeScreen() {
     {id: "3", created_at: new Date(), updated_at: new Date(), is_active: true,plate_id: "GHI789",comment: "3", comment_owner_user_id: "1"},
   ]);
   const [plates, setPlates] = useState<Plate[]>([]);
+
+
   useEffect(() => {
     getLastComments();
     const user = session?.user;
@@ -42,6 +44,8 @@ export default function HomeScreen() {
     
     */
   };
+
+
 
   return (
     <View style={styles.container}>

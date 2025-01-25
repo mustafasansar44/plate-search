@@ -1,12 +1,13 @@
 import React from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
+import {
+    View,
+    Text,
+    StyleSheet,
     TouchableOpacity,
     FlatList
 } from 'react-native';
 import { Plate } from '@/types/Plate';
+import AddPlate from './AddPlate';
 
 interface PlateProps {
     plates: Plate[];
@@ -14,40 +15,48 @@ interface PlateProps {
 
 export const Plates = ({ plates }: PlateProps) => {
 
-const renderItem = ({ item }: { item: Plate }) => (
-  <View style={styles.plateContainer}>
-    <View style={styles.plateBlueSection} />
-    <View style={styles.plateContent}>
-      <Text style={styles.plateNumber}>{item.plate_no || '-'}</Text>
-      <View style={styles.plateDetails}>
-        <Text style={styles.plateStatus}>{item.is_active}</Text>
-        <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
-      </View>
-    </View>
-  </View>
-);
+    const renderItem = ({ item }: { item: Plate }) => (
+        <View style={styles.plateContainer}>
+            <View style={styles.plateBlueSection} />
+            <View style={styles.plateContent}>
+                <Text style={styles.plateNumber}>{item.plate_no || '-'}</Text>
+                <View style={styles.plateDetails}>
+                    <Text style={styles.plateStatus}>{item.is_active}</Text>
+                    <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
+                </View>
+            </View>
+        </View>
+    );
 
     return (
-        <View style={styles.listSection}>
-            <Text style={styles.subHeader}>Son Plakalar</Text>
-            <FlatList
-                data={plates}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
-                ListEmptyComponent={
-                    <Text style={styles.emptyText}>Hesaba kayıtlı plaka mevcut değil.</Text>
-                }
-            />
-        </View>
+        <>
+            <View style={styles.listSection}>
+                <Text style={styles.subHeader}>Hesaba Kayıtlı Plakalar</Text>
+                <FlatList
+                    data={plates}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                    ListEmptyComponent={
+                        <Text style={styles.emptyText}>Hesaba kayıtlı plaka mevcut değil.</Text>
+                    }
+                />
+                <View style={styles.addPlateSection}>
+                    <AddPlate />
+                </View>
+            </View>
+        </>
     );
 };
 
 const styles = StyleSheet.create({
+    addPlateSection: {
+        paddingTop: 16
+    },
     listSection: {
         marginBottom: 16,
         backgroundColor: 'white',
         borderRadius: 8,
-        padding: 16,
+        padding: 8,
     },
     subHeader: {
         fontSize: 16,
@@ -56,7 +65,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     plateContainer: {
-        backgroundColor: '#FFFFFF', 
+        backgroundColor: '#FFFFFF',
         borderWidth: 1,
         borderColor: '#000000',
         borderRadius: 4,

@@ -40,3 +40,5 @@ ScreenView gibi yap home'yi
 başta index'ten başlıyor. Onu düzeltdirekt login'e atsın.
 database tarafında mesela username'a constraints'ler ekle
 plakayı aratanlar count
+
+Register butonuna basınca loading

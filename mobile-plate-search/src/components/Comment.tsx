@@ -47,7 +47,7 @@ export const Comment = ({ comments }: CommentProps) => {
     return (
         <View style={styles.listSection}>
             <View style={styles.headerContainer}>
-                <Text style={styles.subHeader}>Son Yorumlar</Text>
+                <Text style={styles.subHeader}>Son Gönderilen Yorumlar</Text>
                 <TouchableOpacity>
                     <Text style={styles.seeAllText}>Tümünü Gör</Text>
                 </TouchableOpacity>
