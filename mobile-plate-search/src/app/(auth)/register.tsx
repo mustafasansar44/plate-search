@@ -61,7 +61,6 @@ export default function RegisterScreen() {
     { setSubmitting }: FormikHelpers<RegisterFormValues>
   ) => {
     setLoading(true)
-    console.log(values)
     const {
       data: { session },
       error,

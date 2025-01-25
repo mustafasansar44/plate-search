@@ -22,8 +22,6 @@ export const authService = {
     }
   },
   async registerUser(user: UserRegisterDto) {
-    console.log("SA")
-    console.log(user)
     const {
       data: { session },
       error,
@@ -31,8 +29,5 @@ export const authService = {
       email: user.email,
       password: user.password,
     })
-    console.log(error)
-
   }
-  
 }

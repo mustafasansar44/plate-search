@@ -8,9 +8,11 @@ import { Plates } from '../Plates';
 import { useAuth } from '@/providers/AuthProvider';
 import { Plate } from '@/types/Plate';
 import AddPlate from '../AddPlate';
+import { plateService } from '@/services/plateService';
 
 export default function HomeScreen() {
   const { session, profile, isAdmin } = useAuth()
+  
   const [lastThreeComments, setLastThreeComments] = useState<PlateComment[]>([
     {id: "1", created_at: new Date(), updated_at: new Date(), is_active: true,plate_id: "ABC123",comment: "1", comment_owner_user_id: "1"},
     {id: "2", created_at: new Date(), updated_at: new Date(), is_active: true,plate_id: "DEF456",comment: "2", comment_owner_user_id: "1"},
@@ -21,19 +23,14 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getLastComments();
-    const user = session?.user;
+    getPlatesByUser(session.user.id)
 
-
-    if (user) {
-      const fetchPlates = async () => {
-        const fetchedPlates: Plate[] = [] // await getPlatesForUser(user.id)
-        if (fetchedPlates) {
-          setPlates(fetchedPlates)
-        }
-      };
-      fetchPlates();
-    }
   }, []);
+
+  const getPlatesByUser = async (user_id: string) => {
+    const plates: Plate[] = await plateService.getPlatesByUser(user_id)
+    setPlates(plates)
+  }
 
   const getLastComments = () => {
     /*

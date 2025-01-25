@@ -42,3 +42,4 @@ database tarafında mesela username'a constraints'ler ekle
 plakayı aratanlar count
 
 Register butonuna basınca loading
+plate'i unique yap

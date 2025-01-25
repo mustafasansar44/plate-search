@@ -7,8 +7,6 @@ export default function ProfileHeader() {
   const { session, profile, isAdmin } = useAuth()
   const user = session?.user
 
-  console.log(user)
-  console.log(user?.created_at)
   return (
     <View style={styles.profileHeader}>
       <View style={styles.avatarContainer}>

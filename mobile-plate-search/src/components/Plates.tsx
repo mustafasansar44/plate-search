@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    Alert
 } from 'react-native';
 import { Plate } from '@/types/Plate';
 import AddPlate from './AddPlate';
+import { plateService } from '@/services/plateService';
 
 interface PlateProps {
     plates: Plate[];
@@ -15,18 +17,62 @@ interface PlateProps {
 
 export const Plates = ({ plates }: PlateProps) => {
 
-    const renderItem = ({ item }: { item: Plate }) => (
-        <View style={styles.plateContainer}>
-            <View style={styles.plateBlueSection} />
-            <View style={styles.plateContent}>
-                <Text style={styles.plateNumber}>{item.plate_no || '-'}</Text>
-                <View style={styles.plateDetails}>
-                    <Text style={styles.plateStatus}>{item.is_active}</Text>
-                    <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
+    const [selectedPlateId, setSelectedPlateId] = useState<string | null>(null);
+
+    const renderItem = ({ item }: { item: Plate }) => {
+        const isSelected = selectedPlateId === item.id;
+
+        const handlePlatePress = () => {
+            setSelectedPlateId(prevId => prevId === item.id ? null : item.id);
+        };
+
+        const handleDelete = () => {
+            Alert.alert(
+                'Plaka Silme',
+                'Plakayı silmek istediğinizden emin misiniz?',
+                [
+                    {
+                        text: 'İptal',
+                        style: 'cancel',
+                        onPress: () => setSelectedPlateId(null)
+                    },
+                    {
+                        text: 'Sil',
+                        style: 'destructive',
+                        onPress: () => {
+                            plateService.deletePlate(selectedPlateId)
+                            setSelectedPlateId(null);
+                        }
+                    }
+                ],
+                { cancelable: false }
+            );
+        };
+
+        return (
+            <TouchableOpacity 
+                style={styles.plateContainer} 
+                onPress={handlePlatePress}
+            >
+                <View style={styles.plateBlueSection} />
+                <View style={styles.plateContent}>
+                    <Text style={styles.plateNumber}>{item.plate_no || '-'}</Text>
+                    <View style={styles.plateDetails}>
+                        <Text style={styles.plateStatus}>{item.is_active}</Text>
+                        <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
+                    </View>
                 </View>
-            </View>
-        </View>
-    );
+                
+                {isSelected && (
+                    <View style={styles.deleteConfirmation}>
+                        <TouchableOpacity onPress={handleDelete}>
+                            <Text style={styles.deleteText}>Silmek ister misiniz?</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <>
@@ -136,6 +182,19 @@ const styles = StyleSheet.create({
         color: '#888',
         fontSize: 14,
         marginTop: 16,
+    },
+    deleteConfirmation: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+        paddingHorizontal: 15,
+    },
+    deleteText: {
+        color: 'red',
+        fontWeight: 'bold',
     },
 });
 

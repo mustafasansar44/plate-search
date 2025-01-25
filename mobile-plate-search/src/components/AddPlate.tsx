@@ -1,21 +1,22 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useAuth } from '@/providers/AuthProvider';
+import { plateService } from '@/services/plateService';
 
 export default function AddPlate() {
     const [isAddPlateModalVisible, setIsAddPlateModalVisible] = useState(false);
     const [newPlate, setNewPlate] = useState('');
+    const { session, profile, isAdmin } = useAuth()
 
-    const handleAddPlate = () => {
+    const handleAddPlate = async () => {
         // Validate plate format (you might want to add more robust validation)
         if (newPlate.trim() === '') {
           Alert.alert('Hata', 'Lütfen geçerli bir plaka girin.');
           return;
         }
-    
-        // TODO: Implement actual plate addition logic
-        Alert.alert('Başarılı', `Plaka ${newPlate} eklendi.`);
-        
+        await plateService.createPlate(newPlate, session?.user.id)
+
         // Reset modal and state
         setNewPlate('');
         setIsAddPlateModalVisible(false);
