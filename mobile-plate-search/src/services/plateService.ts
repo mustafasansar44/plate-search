@@ -19,7 +19,6 @@ export const plateService = {
 
   // Create a new plate entry
   createPlate: async (plate_no: string, user_id: string) => {
-    console.log(plate_no + " " + user_id)
     const { data, error } = await supabase
     .from("plates")
     .insert(
@@ -36,7 +35,6 @@ export const plateService = {
   // Get a plate by its ID
   findPlateByName: async (plate_no: string) => {
     const { data, error } = await supabase.from(PLATES_TABLE).select('*').eq('plate_no', plate_no).single()
-    console.log(data)
     if(error) {
       console.error('Error fetching plate:', error);
       Alert.alert('Error', 'Could not fetch plate');
