@@ -1,18 +1,47 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/providers/AuthProvider';
+import { usePlateComments } from '@/providers/PlateCommentsProvider';
 
 interface AddPlateCommentProps {
   plateName: string;
+  plateId: string | null;
 }
 
-export default function AddPlateComment({ plateName }: AddPlateCommentProps) {
+export default function AddPlateComment({ plateName, plateId }: AddPlateCommentProps) {
   const [comment, setComment] = useState('');
+  const { session } = useAuth()
+  const { plateComments, addPlateComment, setPlateComments } = usePlateComments()
 
-  const handleSubmitComment = () => {
-    // TODO: Implement comment submission logic
-    console.log(`Comment for plate ${plateName}: ${comment}`);
-    // You might want to call an API or pass this to a parent component
-    setComment(''); // Clear input after submission
+  const handleSubmitComment = async () => {
+
+    let { data, error } = await supabase
+      .rpc('insert_plate_and_insert_plate_comment', { // plate_id, comment_id
+        p_comment: comment,
+        p_comment_owner_user_id: session?.user.id,
+        p_plate_no: plateName
+      })
+    if (error) console.error(error)
+
+    if (data) {
+      const { first_name, last_name, username, phone } = session.user.user_metadata
+      const { comment_id, plate_id } = data[0];
+
+      addPlateComment({
+        id: comment_id,
+        created_at: new Date(),
+        plate_id: plate_id,
+        comment: comment,
+        comment_owner_user_id: session?.user.id,
+        profiles: {
+          first_name: first_name,
+          last_name: last_name,
+          username: username,
+          phone: phone,
+        }
+      })
+    }
   };
 
   return (
@@ -26,7 +55,7 @@ export default function AddPlateComment({ plateName }: AddPlateCommentProps) {
         multiline
         numberOfLines={4}
       />
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.submitButton}
         onPress={handleSubmitComment}
         disabled={comment.trim() === ''}

@@ -1,46 +1,106 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSegments } from 'expo-router';
-import { PlateComment } from '@/types/PlateComment';
 import AddPlateComment from './AddPlateComment';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/providers/AuthProvider';
+import { usePlateComments } from '@/providers/PlateCommentsProvider';
 
 interface CommentDetailProps {
-    comments: PlateComment[];
+    comments: any[];
     plate: string;
 }
 
 export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
     const segment = useSegments();
 
-    const renderCommentItem = ({ item }: { item: PlateComment }) => (
+    const { plateComments, addPlateComment, setPlateComments } = usePlateComments()
+    const [plateId, setPlateId] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        findPlateComments(plate)
+    }, [])
+
+    const findPlateComments = async (plate_no: string) => {
+        setIsLoading(true)
+        const { data, error } = await supabase
+        .from('plates')
+        .select(`
+          id,
+          plate_no,
+          user_id,
+          plate_comments (
+            id,
+            created_at,
+            updated_at,
+            is_active,
+            plate_id,
+            comment,
+            comment_owner_user_id,
+            profiles (
+                id,
+                first_name,
+                last_name,
+                username,
+                phone
+            )
+          )
+        `)
+        .eq('plate_no', plate_no)
+        .single();
+
+        if(error) {
+            setIsLoading(false)
+            return
+        }
+        setPlateId(data.id)
+
+        if(data.plate_comments.length > 0) {
+            setPlateComments(data.plate_comments)
+            setIsLoading(false)
+            return
+        }
+        Alert.alert("Plaka yorumları bulunamadı!")
+        setIsLoading(false)
+      }
+    
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleString();
+    };
+
+    const renderCommentItem = ({ item }: { item: any }) => (
         <View style={styles.commentContainer}>
             <View style={styles.commentHeader}>
                 <View style={styles.userInfoContainer}>
                     <Text style={styles.userName}>
-                        {item.commentOwnerUserId || 'Anonymous'}
+                        {item?.profiles?.first_name + " " + item?.profiles?.last_name || 'Anonymous'}
                     </Text>
                     <Text style={styles.timestamp}>
-                        {item.createdAt.toLocaleString()}
+                        {formatDate(item?.created_at)}
                     </Text>
                 </View>
                 {segment[0] === '(admin)' && (
                     <View style={styles.adminActions}>
                         <TouchableOpacity 
                             style={styles.actionButton}
-                            onPress={() => console.log(`Edit comment ${item.id}`)}
+                            onPress={() => console.log(`Edit comment ${item?.id}`)}
                         >
                             <Ionicons name="create-outline" size={20} color="#007bff" />
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={styles.actionButton}
-                            onPress={() => console.log(`Delete comment ${item.id}`)}
+                            onPress={() => console.log(`Delete comment ${item?.id}`)}
                         >
                             <Ionicons name="trash-outline" size={20} color="#dc3545" />
                         </TouchableOpacity>
@@ -48,39 +108,49 @@ export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
                 )}
             </View>
             <Text style={styles.commentText}>
-                {item.comment}
-            </Text>
-            <Text style={styles.plateInfo}>
-                Plaka: {item.plateId}
+                {item?.comment}
             </Text>
         </View>
     );
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.headerTitle}>Yorumlar</Text>
-            <FlatList
-                data={comments}
-                renderItem={renderCommentItem}
-                keyExtractor={(item) => item.id.toString()}
-                ListEmptyComponent={
-                    <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
-                }
-                contentContainerStyle={styles.listContainer}
-            />
-            <AddPlateComment plateName={plate} />
-        </View>
-    );
+    if(isLoading){
+        return (
+            <View>
+                <ActivityIndicator size="large" color="#007bff" />
+            </View>
+        )
+    }else{
+        return (
+            <View>
+                <Text style={styles.headerTitle}>Yorumlar</Text>
+                
+                <FlatList
+                    data={plateComments}
+                    renderItem={renderCommentItem}
+                    keyExtractor={(item) => item.id}
+                    ListEmptyComponent={
+                        <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
+                    }
+                    contentContainerStyle={styles.listContainer}
+                />
+                <AddPlateComment plateName={plate} plateId={plateId} />
+            </View>
+        );
+    }
 };
 
+
+/*
+
+
+
+*/
+
+
+
+
 const styles = StyleSheet.create({
-    /*
-        container: {
-        flex: 1,
-        backgroundColor: '#f8f9fa',
-    },
-    
-    */
+
     headerTitle: {
         fontSize: 18,
         fontWeight: '700',

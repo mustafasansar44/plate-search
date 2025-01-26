@@ -10,7 +10,7 @@ export default function AdminCommentsScreen() {
 
   return (
     <View>
-      <Stack.Screen options={{ title: `Plaka Sorgula ` }} />
+      <Stack.Screen options={{ title: `Plaka Sorgula: ${plate_name}` }} />
       <CommentDetail comments={comments} plate={plate_name as string} />
     </View>
   );
