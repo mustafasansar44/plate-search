@@ -5,7 +5,7 @@ import { Plate } from "@/types/Plate";
 
 const PLATES_TABLE = 'plates';
 
-export const getPlatesByUser = async (userId: string) : Promise<Plate[]> => {
+export const getPlatesByUser = async (userId: string): Promise<Plate[]> => {
   const filters = { user_id: userId }; // Filtreleme kriteri
   const plates = await select(PLATES_TABLE, '*', filters); // BaseService'deki select'i kullanıyoruz
   if (!plates) {
@@ -16,19 +16,13 @@ export const getPlatesByUser = async (userId: string) : Promise<Plate[]> => {
 }
 
 export const createPlate = async (plate_no: string, user_id: string) => {
-  const { data, error } = await supabase
-    .from("plates")
-    .insert(
-      { "plate_no": plate_no, "user_id": user_id }
-    )
-    .select()
-    .single()
-    
-  if (error) {
-    Alert.alert("Plaka Oluşturulurken hata!")
-    return
-  }
-  Alert.alert("Plaka Oluşturuldu!")
+  let { data, error } = await supabase
+    .rpc('if_exist_update_otherwise_insert_plate', {
+      p_plate_no: plate_no,
+      p_user_id: user_id
+    }).single()
+  if (error) console.error(error)
+  else console.log(data)
   return data;
 }
 
@@ -82,7 +76,7 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string): Promise
 
   if (error) {
     if (error.details == "The result contains 0 rows") {
-      console.warn("Veri yok.")
+      console.log("Veri yok.")
       return null
     }
 
