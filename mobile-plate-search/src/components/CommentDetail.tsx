@@ -38,7 +38,7 @@ export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
         setPlateId(data?.id)
         changePlateComments(data?.plate_comments)
         setIsLoading(false)
-      }
+    }
     
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);

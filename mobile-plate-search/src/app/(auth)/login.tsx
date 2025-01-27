@@ -1,25 +1,31 @@
-import React, { useState } from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native'
 import { Button, Input } from '@rneui/themed'
 import { useAuth } from '@/providers/AuthProvider'
 import { signInWithEmail } from '@/services/AuthService'
+import { Redirect, useSegments } from 'expo-router'
+import { supabase } from '@/lib/supabase'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('mustafasansar01@gmail.com')
   const [password, setPassword] = useState('sansar2222')
-  const { loading, setLoading } = useAuth()
+  
+  const segment = useSegments();
+  const { session, loading, setLoading } = useAuth()
 
   async function signIn() {
+    console.log("SASASA")
     setLoading(true)
-    await signInWithEmail(email, password)
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    })
+    console.log("SASASA")
+    if (error) Alert.alert(error.message)
     setLoading(false)
   }
 
-  if (loading) {
-    return (
-      <ActivityIndicator />
-    )
-  }
+
 
   return (
     <View style={styles.container}>
@@ -45,7 +51,7 @@ export default function LoginScreen() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signIn()} />
+        <Button title="Sign in" onPress={() => signIn()} />
       </View>
     </View>
   )

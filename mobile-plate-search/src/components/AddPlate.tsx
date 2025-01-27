@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAuth } from '@/providers/AuthProvider';
 import { createPlate } from '@/services/PlateService';
+import { usePlates } from '@/providers/PlateProvider';
 
 
 
@@ -10,14 +11,16 @@ export default function AddPlate() {
     const [isAddPlateModalVisible, setIsAddPlateModalVisible] = useState(false);
     const [newPlate, setNewPlate] = useState('');
     const { session, profile, isAdmin } = useAuth()
+    const { addPlate, validatePlate } = usePlates()
+
 
     const handleAddPlate = async () => {
-        // Validate plate format (you might want to add more robust validation)
-        if (newPlate.trim() === '') {
-          Alert.alert('Hata', 'Lütfen geçerli bir plaka girin.');
-          return;
-        }
-        await createPlate(newPlate, session?.user.id)
+        const result = validatePlate(newPlate)
+        if(result === null) return
+        if(session === null) return
+        const plate = await createPlate(newPlate, session?.user.id)
+
+        addPlate(plate)
 
         // Reset modal and state
         setNewPlate('');

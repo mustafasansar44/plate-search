@@ -21,11 +21,16 @@ export const createPlate = async (plate_no: string, user_id: string) => {
     .insert(
       { "plate_no": plate_no, "user_id": user_id }
     )
+    .select()
+    .single()
+    
   if (error) {
     Alert.alert("Plaka Oluşturulurken hata!")
     return
   }
+  console.log(data)
   Alert.alert("Plaka Oluşturuldu!")
+  return data;
 }
 
 export const findPlateByName = async (plate_no: string) => {

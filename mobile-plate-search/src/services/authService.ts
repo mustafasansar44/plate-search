@@ -3,17 +3,25 @@ import { supabase } from '../lib/supabase'
 import { Alert } from 'react-native'
 
 export const signInWithEmail = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  })
+  try {
+    console.log("1.sa");
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
 
-  if (error) {
-    Alert.alert(error.message)
-    return { success: false, error }
+    if (error) {
+      Alert.alert(error.message)
+      return { success: false, error }
+    }
+    return { success: true, data }
+  } catch (err) {
+    console.error("Hata oluştu: ", err);
   }
 
-  return { success: true, data }
+
+
+  
 }
 
 export const registerUser = async (user: UserRegisterDto) => {

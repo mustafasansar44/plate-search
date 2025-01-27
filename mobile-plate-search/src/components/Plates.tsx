@@ -9,15 +9,33 @@ import {
 } from 'react-native';
 import { Plate } from '@/types/Plate';
 import AddPlate from './AddPlate';
-import { deletePlate } from '@/services/PlateService';
+import { deletePlate, getPlatesByUser } from '@/services/PlateService';
+import { usePlates } from '@/providers/PlateProvider';
+import { useAuth } from '@/providers/AuthProvider';
 
-interface PlateProps {
-    plates: Plate[];
-}
 
-export const Plates = ({ plates }: PlateProps) => {
+
+
+export const Plates = () => {
 
     const [selectedPlateId, setSelectedPlateId] = useState<string | null>(null);
+    const { plates, changePlates } = usePlates()
+    const { session } = useAuth()
+    const [isLoading, setIsLoading] = useState(true)
+
+
+    useEffect(() => {
+
+        
+    }, [])
+
+    const getPlates = async (user_id: string) => {
+        setIsLoading(true)
+        const data = await getPlatesByUser(user_id)
+        changePlates(data)
+        setIsLoading(false)
+    }
+    
 
     const renderItem = ({ item }: { item: Plate }) => {
         const isSelected = selectedPlateId === item.id;
@@ -51,8 +69,8 @@ export const Plates = ({ plates }: PlateProps) => {
         };
 
         return (
-            <TouchableOpacity 
-                style={styles.plateContainer} 
+            <TouchableOpacity
+                style={styles.plateContainer}
                 onPress={handlePlatePress}
             >
                 <View style={styles.plateBlueSection} />
@@ -63,7 +81,7 @@ export const Plates = ({ plates }: PlateProps) => {
                         <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
                     </View>
                 </View>
-                
+
                 {isSelected && (
                     <View style={styles.deleteConfirmation}>
                         <TouchableOpacity onPress={handleDelete}>

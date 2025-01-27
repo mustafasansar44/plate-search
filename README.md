@@ -49,3 +49,4 @@ plate_no plate_name aynı şey düzelt
 login bugunu kontrol et 
 plaka, bir user_id'ye sahip olmak zorunda değil.
 bir user kayıt olduktan sonra plaka eklerken eğer o plaka var ise ve user_id'si yoksa direkt atanabilir
+tüm butonlar, eğer formlar valid değilse disabled

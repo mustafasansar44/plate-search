@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
+import { PlateComment } from '@/types/PlateComment';
 
 interface AddPlateCommentProps {
   plateName: string;
