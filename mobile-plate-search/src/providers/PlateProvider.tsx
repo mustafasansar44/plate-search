@@ -27,14 +27,14 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const validatePlate = (plate_no: string | null) => {
         if (!plate_no || plate_no.trim().length === 0) {
-            console.log("Geçersiz plaka. Lütfen plaka bilgisi giriniz.");
+            console.warn("Geçersiz plaka. Lütfen plaka bilgisi giriniz.");
             return null;
         }
 
         const formattedPlate = plate_no.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
 
         if (!/^[A-Z0-9]{6,8}$/.test(formattedPlate)) {
-            console.log("Geçersiz plaka formatı. Lütfen geçerli bir plaka giriniz.");
+            console.warn("Geçersiz plaka formatı. Lütfen geçerli bir plaka giriniz.");
             return null;
         }
 

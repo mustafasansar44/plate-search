@@ -20,12 +20,8 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
   
   const changePlateComments = async (plate_no: string) => {
     const data = await findPlateWithCommentsAndProfile(plate_no);
-    const plateId = data?.id
-    
-    console.log(data)
-
-    if(!data.plateComments) return;
-    // setPlateComments(data?.plate_comments);
+    if(!data.plate_comments) return;
+    setPlateComments(data?.plate_comments);
   };
 
   return (

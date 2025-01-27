@@ -17,6 +17,7 @@ export const CommentDetail = () => {
     const { plateComments, changePlateComments } = usePlateComments()
 
     useEffect(() => {
+        console.log("Plaka Sorgula")
         findPlateComments(plate_no as string)
     }, [])
 

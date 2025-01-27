@@ -28,7 +28,6 @@ export const createPlate = async (plate_no: string, user_id: string) => {
     Alert.alert("Plaka Oluşturulurken hata!")
     return
   }
-  console.log(data)
   Alert.alert("Plaka Oluşturuldu!")
   return data;
 }
@@ -83,7 +82,7 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string): Promise
 
   if (error) {
     if (error.details == "The result contains 0 rows") {
-      console.log("Veri yok.")
+      console.warn("Veri yok.")
       return null
     }
 

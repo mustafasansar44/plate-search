@@ -13,7 +13,7 @@ export const select = async (tableName: string, query = '*', filters = {}, singl
 
     if (error) {
         if (error.details == "The result contains 0 rows") {
-            console.log("Veri bulunamadı!")
+            console.warn("Veri bulunamadı!")
             return setReturnValue(single)
         }
 

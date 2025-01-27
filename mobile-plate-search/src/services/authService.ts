@@ -4,7 +4,6 @@ import { Alert } from 'react-native'
 
 export const signInWithEmail = async (email: string, password: string) => {
   try {
-    console.log("1.sa");
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
