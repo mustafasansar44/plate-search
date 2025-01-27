@@ -23,7 +23,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getLastComments();
-    getPlates(session.user.id)
+    if(session) getPlates(session.user.id)
 
   }, []);
 

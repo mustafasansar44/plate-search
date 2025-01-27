@@ -12,7 +12,7 @@ interface AddPlateCommentProps {
 export default function AddPlateComment({ plateName, plateId }: AddPlateCommentProps) {
   const [comment, setComment] = useState('');
   const { session } = useAuth()
-  const { plateComments, addPlateComment, setPlateComments } = usePlateComments()
+  const { addPlateComment } = usePlateComments()
 
   const handleSubmitComment = async () => {
 
@@ -24,7 +24,7 @@ export default function AddPlateComment({ plateName, plateId }: AddPlateCommentP
       })
     if (error) console.error(error)
 
-    if (data) {
+    if (data && session) {
       const { first_name, last_name, username, phone } = session.user.user_metadata
       const { comment_id, plate_id } = data[0];
 
@@ -35,6 +35,7 @@ export default function AddPlateComment({ plateName, plateId }: AddPlateCommentP
         comment: comment,
         comment_owner_user_id: session?.user.id,
         profiles: {
+          id: session?.user.id,
           first_name: first_name,
           last_name: last_name,
           username: username,

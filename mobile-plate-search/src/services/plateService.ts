@@ -1,10 +1,11 @@
 import { supabase } from "@/lib/supabase";
 import { Alert } from "react-native";
 import { select } from "@/services/BaseService";
+import { Plate } from "@/types/Plate";
 
 const PLATES_TABLE = 'plates';
 
-export const getPlatesByUser = async (userId: string) => {
+export const getPlatesByUser = async (userId: string) : Promise<Plate[]> => {
   const filters = { user_id: userId }; // Filtreleme kriteri
   const plates = await select(PLATES_TABLE, '*', filters); // BaseService'deki select'i kullanıyoruz
   if (!plates) {

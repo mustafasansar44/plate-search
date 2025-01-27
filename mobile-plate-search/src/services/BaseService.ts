@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 
-export const select = async (tableName: string, query = '*', filters = {}, single = false) => {
+export const select = async (tableName: string, query = '*', filters = {}, single = false) : Promise<any> => {
     let queryBuilder = supabase.from(tableName).select(query);
 
     // Filter'lar

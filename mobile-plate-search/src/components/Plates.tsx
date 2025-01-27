@@ -40,6 +40,7 @@ export const Plates = ({ plates }: PlateProps) => {
                         text: 'Sil',
                         style: 'destructive',
                         onPress: () => {
+                            if (!selectedPlateId) return;
                             deletePlate(selectedPlateId)
                             setSelectedPlateId(null);
                         }
