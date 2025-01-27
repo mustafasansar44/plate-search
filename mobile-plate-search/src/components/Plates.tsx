@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -9,33 +9,13 @@ import {
 } from 'react-native';
 import { Plate } from '@/types/Plate';
 import AddPlate from './AddPlate';
-import { deletePlate, getPlatesByUser } from '@/services/PlateService';
 import { usePlates } from '@/providers/PlateProvider';
-import { useAuth } from '@/providers/AuthProvider';
-
-
 
 
 export const Plates = () => {
 
     const [selectedPlateId, setSelectedPlateId] = useState<string | null>(null);
-    const { plates, changePlates } = usePlates()
-    const { session } = useAuth()
-    const [isLoading, setIsLoading] = useState(true)
-
-
-    useEffect(() => {
-
-        
-    }, [])
-
-    const getPlates = async (user_id: string) => {
-        setIsLoading(true)
-        const data = await getPlatesByUser(user_id)
-        changePlates(data)
-        setIsLoading(false)
-    }
-    
+    const { plates, removePlate } = usePlates()
 
     const renderItem = ({ item }: { item: Plate }) => {
         const isSelected = selectedPlateId === item.id;
@@ -59,7 +39,7 @@ export const Plates = () => {
                         style: 'destructive',
                         onPress: () => {
                             if (!selectedPlateId) return;
-                            deletePlate(selectedPlateId)
+                            removePlate(selectedPlateId)
                             setSelectedPlateId(null);
                         }
                     }

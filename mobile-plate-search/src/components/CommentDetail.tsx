@@ -5,39 +5,23 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    Alert,
-    ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useSegments } from 'expo-router';
+import { useLocalSearchParams, useSegments } from 'expo-router';
 import AddPlateComment from './AddPlateComment';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/AuthProvider';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
-import { findPlateWithCommentsAndProfile } from '@/services/PlateService';
 
-interface CommentDetailProps {
-    comments: any[];
-    plate: string;
-}
-
-export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
+export const CommentDetail = () => {
+    const { plate_no } = useLocalSearchParams();
     const segment = useSegments();
-
-    const { plateComments, addPlateComment, changePlateComments } = usePlateComments()
-    const [plateId, setPlateId] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { plateComments, changePlateComments } = usePlateComments()
 
     useEffect(() => {
-        findPlateComments(plate)
+        findPlateComments(plate_no as string)
     }, [])
 
     const findPlateComments = async (plate_no: string) => {
-        setIsLoading(true)
-        const data = await findPlateWithCommentsAndProfile(plate_no);
-        setPlateId(data?.id)
-        changePlateComments(data?.plate_comments)
-        setIsLoading(false)
+        changePlateComments(plate_no)
     }
     
     const formatDate = (dateString: string) => {
@@ -79,38 +63,25 @@ export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
         </View>
     );
 
-    if(isLoading){
-        return (
-            <View>
-                <ActivityIndicator size="large" color="#007bff" />
-            </View>
-        )
-    }else{
-        return (
-            <View>
-                <Text style={styles.headerTitle}>Yorumlar</Text>
-                
-                <FlatList
-                    data={plateComments}
-                    renderItem={renderCommentItem}
-                    keyExtractor={(item) => item.id}
-                    ListEmptyComponent={
-                        <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
-                    }
-                    contentContainerStyle={styles.listContainer}
-                />
-                <AddPlateComment plateName={plate} plateId={plateId} />
-            </View>
-        );
-    }
+    return (
+        <View>
+            <Text style={styles.headerTitle}>Yorumlar</Text>
+            
+            <FlatList
+                data={plateComments}
+                renderItem={renderCommentItem}
+                keyExtractor={(item) => item.id}
+                ListEmptyComponent={
+                    <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
+                }
+                contentContainerStyle={styles.listContainer}
+            />
+            <AddPlateComment />
+        </View>
+    );
 };
 
 
-/*
-
-
-
-*/
 
 
 

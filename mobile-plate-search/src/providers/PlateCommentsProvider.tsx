@@ -1,3 +1,4 @@
+import { findPlateWithCommentsAndProfile } from '@/services/PlateService';
 import { PlateCommentDetails } from '@/types/dtos/PlateCommentDetails';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
@@ -5,7 +6,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 interface PlateCommentsContextType {
   plateComments: PlateCommentDetails[];
   addPlateComment: (plateComment: PlateCommentDetails) => void;
-  changePlateComments: (plateComments: PlateCommentDetails[]) => void;
+  changePlateComments: (plate_no: string) => void;
 }
 
 const PlateCommentsContext = createContext<PlateCommentsContextType | undefined>(undefined);
@@ -16,10 +17,15 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
   const addPlateComment = (plateComment: PlateCommentDetails) => {
     setPlateComments(prevComments => [...prevComments, plateComment]);
   };
+  
+  const changePlateComments = async (plate_no: string) => {
+    const data = await findPlateWithCommentsAndProfile(plate_no);
+    const plateId = data?.id
+    
+    console.log(data)
 
-  const changePlateComments = (plateComments: PlateCommentDetails[]) => {
-    if(!plateComments) return;
-    setPlateComments(plateComments);
+    if(!data.plateComments) return;
+    // setPlateComments(data?.plate_comments);
   };
 
   return (

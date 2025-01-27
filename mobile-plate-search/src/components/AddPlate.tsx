@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, Alert } fro
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAuth } from '@/providers/AuthProvider';
-import { createPlate } from '@/services/PlateService';
 import { usePlates } from '@/providers/PlateProvider';
 
 
@@ -18,11 +17,9 @@ export default function AddPlate() {
         const result = validatePlate(newPlate)
         if(result === null) return
         if(session === null) return
-        const plate = await createPlate(newPlate, session?.user.id)
 
-        addPlate(plate)
-
-        // Reset modal and state
+        await addPlate(newPlate, session?.user.id)
+        
         setNewPlate('');
         setIsAddPlateModalVisible(false);
       };

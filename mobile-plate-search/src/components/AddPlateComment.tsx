@@ -4,24 +4,21 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
 import { PlateComment } from '@/types/PlateComment';
+import { useLocalSearchParams } from 'expo-router';
 
-interface AddPlateCommentProps {
-  plateName: string;
-  plateId: string | null;
-}
 
-export default function AddPlateComment({ plateName, plateId }: AddPlateCommentProps) {
+export default function AddPlateComment() {
   const [comment, setComment] = useState('');
   const { session } = useAuth()
   const { addPlateComment } = usePlateComments()
+  const { plate_no } = useLocalSearchParams();
 
   const handleSubmitComment = async () => {
-
     let { data, error } = await supabase
       .rpc('insert_plate_and_insert_plate_comment', { // plate_id, comment_id
         p_comment: comment,
         p_comment_owner_user_id: session?.user.id,
-        p_plate_no: plateName
+        p_plate_no: plate_no
       })
     if (error) console.error(error)
 
@@ -46,9 +43,11 @@ export default function AddPlateComment({ plateName, plateId }: AddPlateCommentP
     }
   };
 
+  
+
   return (
     <View style={styles.container}>
-      <Text style={styles.plateTitle}>Plaka: {plateName}</Text>
+      <Text style={styles.plateTitle}>Plaka: {plate_no}</Text>
       <TextInput
         style={styles.input}
         placeholder="Plaka sahibi hakkında yorumunuz..."

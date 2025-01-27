@@ -1,11 +1,13 @@
+import { createPlate, deletePlate } from '@/services/PlateService';
 import { Plate } from '@/types/Plate';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface PlateContextType {
     plates: Plate[];
-    addPlate: (plate: Plate) => void;
+    addPlate: (newPlate: string, user_id: string) => void;
     changePlates: (plates: Plate[]) => void;
     validatePlate: (plate_no: string | null) => string | null;
+    removePlate: (plateId: string) => void;
 }
 
 const PlateContext = createContext<PlateContextType | undefined>(undefined);
@@ -13,7 +15,8 @@ const PlateContext = createContext<PlateContextType | undefined>(undefined);
 export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [plates, setPlates] = useState<Plate[]>([]);
 
-    const addPlate = (plate: Plate) => {
+    const addPlate = async (newPlate: string, user_id: string) => {
+        const plate = await createPlate(newPlate, user_id)
         setPlates(prevPlates => [...prevPlates, plate]);
     };
 
@@ -38,8 +41,13 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         return formattedPlate;
     }
 
+    const removePlate = async (id: string) => {
+        await deletePlate(id)
+        setPlates(prevPlates => prevPlates.filter(plate => plate.id !== id));
+    }
+
     return (
-        <PlateContext.Provider value={{ plates, addPlate, changePlates, validatePlate }}>
+        <PlateContext.Provider value={{ plates, addPlate, changePlates, validatePlate, removePlate }}>
             {children}
         </PlateContext.Provider>
     );
