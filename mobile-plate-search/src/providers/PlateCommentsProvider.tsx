@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { PlateComment } from '@/types/PlateComment';
 
 interface PlateCommentDetails {
     id: string;
@@ -17,22 +16,27 @@ interface PlateCommentDetails {
 }
 
 interface PlateCommentsContextType {
-  plateComments: PlateComment[];
+  plateComments: PlateCommentDetails[];
   addPlateComment: (plateComment: PlateCommentDetails) => void;
-  setPlateComments: (plateComments: PlateComment[]) => void;
+  changePlateComments: (plateComments: PlateCommentDetails[]) => void;
 }
 
 const PlateCommentsContext = createContext<PlateCommentsContextType | undefined>(undefined);
 
 export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [plateComments, setPlateComments] = useState<PlateComment[]>([]);
+  const [plateComments, setPlateComments] = useState<PlateCommentDetails[]>([]);
 
-  const addPlateComment = (plateComment: PlateComment) => {
+  const addPlateComment = (plateComment: PlateCommentDetails) => {
     setPlateComments(prevComments => [...prevComments, plateComment]);
   };
 
+  const changePlateComments = (plateComments: PlateCommentDetails[]) => {
+    if(!plateComments) return;
+    setPlateComments(plateComments);
+  };
+
   return (
-    <PlateCommentsContext.Provider value={{ plateComments, addPlateComment, setPlateComments }}>
+    <PlateCommentsContext.Provider value={{ plateComments, addPlateComment, changePlateComments }}>
       {children}
     </PlateCommentsContext.Provider>
   );

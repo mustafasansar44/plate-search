@@ -2,7 +2,9 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, Alert } fro
 import React, { useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAuth } from '@/providers/AuthProvider';
-import { plateService } from '@/services/plateService';
+import { createPlate } from '@/services/PlateService';
+
+
 
 export default function AddPlate() {
     const [isAddPlateModalVisible, setIsAddPlateModalVisible] = useState(false);
@@ -15,7 +17,7 @@ export default function AddPlate() {
           Alert.alert('Hata', 'Lütfen geçerli bir plaka girin.');
           return;
         }
-        await plateService.createPlate(newPlate, session?.user.id)
+        await createPlate(newPlate, session?.user.id)
 
         // Reset modal and state
         setNewPlate('');

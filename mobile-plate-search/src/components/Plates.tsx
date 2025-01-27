@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Plate } from '@/types/Plate';
 import AddPlate from './AddPlate';
-import { plateService } from '@/services/plateService';
+import { deletePlate } from '@/services/PlateService';
 
 interface PlateProps {
     plates: Plate[];
@@ -40,7 +40,7 @@ export const Plates = ({ plates }: PlateProps) => {
                         text: 'Sil',
                         style: 'destructive',
                         onPress: () => {
-                            plateService.deletePlate(selectedPlateId)
+                            deletePlate(selectedPlateId)
                             setSelectedPlateId(null);
                         }
                     }

@@ -14,6 +14,7 @@ import AddPlateComment from './AddPlateComment';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
+import { findPlateWithCommentsAndProfile } from '@/services/PlateService';
 
 interface CommentDetailProps {
     comments: any[];
@@ -23,7 +24,7 @@ interface CommentDetailProps {
 export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
     const segment = useSegments();
 
-    const { plateComments, addPlateComment, setPlateComments } = usePlateComments()
+    const { plateComments, addPlateComment, changePlateComments } = usePlateComments()
     const [plateId, setPlateId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,44 +34,9 @@ export const CommentDetail = ({ comments, plate }: CommentDetailProps) => {
 
     const findPlateComments = async (plate_no: string) => {
         setIsLoading(true)
-        const { data, error } = await supabase
-        .from('plates')
-        .select(`
-          id,
-          plate_no,
-          user_id,
-          plate_comments (
-            id,
-            created_at,
-            updated_at,
-            is_active,
-            plate_id,
-            comment,
-            comment_owner_user_id,
-            profiles (
-                id,
-                first_name,
-                last_name,
-                username,
-                phone
-            )
-          )
-        `)
-        .eq('plate_no', plate_no)
-        .single();
-
-        if(error) {
-            setIsLoading(false)
-            return
-        }
-        setPlateId(data.id)
-
-        if(data.plate_comments.length > 0) {
-            setPlateComments(data.plate_comments)
-            setIsLoading(false)
-            return
-        }
-        Alert.alert("Plaka yorumları bulunamadı!")
+        const data = await findPlateWithCommentsAndProfile(plate_no);
+        setPlateId(data?.id)
+        changePlateComments(data?.plate_comments)
         setIsLoading(false)
       }
     

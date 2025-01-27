@@ -46,6 +46,6 @@ plate'i unique yap
 home sayfasındaki plaka ve yorumlar 3 ten fazla olursa sürüklemeli görelim.  eğer yorumlar 3'ten fazla ise sürükleme olsun.
 plate_no plate_name aynı şey düzelt
 
-
+login bugunu kontrol et 
 plaka, bir user_id'ye sahip olmak zorunda değil.
 bir user kayıt olduktan sonra plaka eklerken eğer o plaka var ise ve user_id'si yoksa direkt atanabilir

@@ -8,7 +8,7 @@ import { Plates } from '../Plates';
 import { useAuth } from '@/providers/AuthProvider';
 import { Plate } from '@/types/Plate';
 import AddPlate from '../AddPlate';
-import { plateService } from '@/services/plateService';
+import { getPlatesByUser } from '@/services/PlateService';
 
 export default function HomeScreen() {
   const { session, profile, isAdmin } = useAuth()
@@ -23,12 +23,12 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getLastComments();
-    getPlatesByUser(session.user.id)
+    getPlates(session.user.id)
 
   }, []);
 
-  const getPlatesByUser = async (user_id: string) => {
-    const plates: Plate[] = await plateService.getPlatesByUser(user_id)
+  const getPlates = async (user_id: string) => {
+    const plates: Plate[] = await getPlatesByUser(user_id)
     setPlates(plates)
   }
 

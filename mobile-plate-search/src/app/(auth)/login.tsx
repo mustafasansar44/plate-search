@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { Button, Input } from '@rneui/themed'
 import { useAuth } from '@/providers/AuthProvider'
-import { authService } from '@/services/authService'
+import { signInWithEmail } from '@/services/AuthService'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('mustafasansar01@gmail.com')
   const [password, setPassword] = useState('sansar2222')
   const { loading, setLoading } = useAuth()
 
-  async function signInWithEmail() {
+  async function signIn() {
     setLoading(true)
-    await authService.signInWithEmail(email, password)
+    await signInWithEmail(email, password)
     setLoading(false)
   }
 
@@ -45,7 +45,7 @@ export default function LoginScreen() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
+        <Button title="Sign in" disabled={loading} onPress={() => signIn()} />
       </View>
     </View>
   )
