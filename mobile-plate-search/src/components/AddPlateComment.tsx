@@ -8,6 +8,11 @@ import { insertPlateComment } from '@/services/PlateService';
 
 export default function AddPlateComment() {
   const [comment, setComment] = useState('');
+
+  // Input Parameter TextInput
+  const maxLength = 500;
+  const remainingCharacters = maxLength - comment.length;
+
   const { session } = useAuth()
   const { addPlateComment } = usePlateComments()
   const { plate_no } = useLocalSearchParams();
@@ -36,7 +41,7 @@ export default function AddPlateComment() {
     }
   };
 
-  
+
 
   return (
     <View style={styles.container}>
@@ -48,7 +53,11 @@ export default function AddPlateComment() {
         onChangeText={setComment}
         multiline
         numberOfLines={4}
+        maxLength={maxLength}
       />
+      <Text style={styles.counterText}>
+        {remainingCharacters} / {maxLength} karakter kaldı.
+      </Text>
       <TouchableOpacity
         style={styles.submitButton}
         onPress={handleSubmitComment}
@@ -68,6 +77,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  counterText: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'right',
   },
   input: {
     borderWidth: 1,

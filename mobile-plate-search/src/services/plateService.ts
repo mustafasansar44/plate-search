@@ -88,12 +88,19 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string): Promise
 }
 
 export const insertPlateComment = async (comment, user_id, plate_no) => {
+  console.log("SASASASAASASASAS")
+
   let { data, error } = await supabase
   .rpc('insert_plate_and_insert_plate_comment', { // plate_id, comment_id
     p_comment: comment,
     p_comment_owner_user_id: user_id,
     p_plate_no: plate_no
   })
+  console.log("SASASASAASASASAS")
+  console.log(data)
+  console.log(error)
+  console.log("SASASASAASASASAS")
+
   if (error) console.error(error)
     return data;
 }
