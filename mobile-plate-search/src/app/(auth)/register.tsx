@@ -1,10 +1,11 @@
-import React, { useState, FormEvent, useRef } from 'react'
-import { Alert, StyleSheet, View, AppState, GestureResponderEvent, ScrollView, Text } from 'react-native'
-import { Button, Input } from '@rneui/themed'
-import { supabase } from '@/lib/supabase'
-import { Formik, FormikHelpers, FormikProps } from 'formik'
-import * as Yup from 'yup'
-import PhoneInput from 'react-native-phone-input'
+import React, { useState, useRef } from 'react';
+import { Alert, StyleSheet, View, ScrollView, Text } from 'react-native';
+import { Button, Input } from '@rneui/themed';
+import { supabase } from '@/lib/supabase';
+import { Formik, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import PhoneInput from 'react-native-phone-input';
+import { validationRules } from '@/constants/validationRules';
 
 // Type definition for form values
 interface RegisterFormValues {
@@ -19,36 +20,31 @@ interface RegisterFormValues {
 
 // Validation schema
 const RegisterSchema = Yup.object().shape({
-  first_name: Yup.string()
-    .max(16, 'First name must be at most 16 characters')
-    .required('First name is required'),
-  last_name: Yup.string()
-    .max(16, 'Last name must be at most 16 characters')
-    .required('Last name is required'),
-  username: Yup.string()
-    .max(16, 'Username must be at most 16 characters')
-    .required('Username is required'),
-  email: Yup.string()
-    .email('Invalid email')
-    .max(50, 'Email must be at most 50 characters')
-    .required('Email is required'),
-  password: Yup.string()
-    .max(16, 'Password must be at most 16 characters')
-    .required('Password is required'),
-  phone: Yup.string()
-    .required('Phone number is required'),
-  tcno: Yup.string() // Optional field
-})
+  first_name: validationRules.first_name,
+  last_name: validationRules.last_name,
+  username: validationRules.username,
+  email: validationRules.email,
+  password: validationRules.password,
+  tcno: validationRules.tcno,
+});
 
 export default function RegisterScreen() {
-  const [loading, setLoading] = useState<boolean>(false)
-  const phoneInputRef = useRef(null)
+  const [loading, setLoading] = useState<boolean>(false);
+  const phoneInputRef = useRef<PhoneInput>(null);
 
   const handleSignUp = async (
-    values: RegisterFormValues, 
+    values: RegisterFormValues,
     { setSubmitting }: FormikHelpers<RegisterFormValues>
   ) => {
-    setLoading(true)
+    if (!phoneInputRef.current?.isValidNumber()) {
+      Alert.alert('Invalid phone number');
+      return;
+    }
+
+    setLoading(true);
+    const phoneNumber = phoneInputRef.current?.getValue();
+    const phoneCode = phoneInputRef.current?.getCountryCode();
+
     const {
       data: { session },
       error,
@@ -61,19 +57,20 @@ export default function RegisterScreen() {
           last_name: values.last_name,
           username: values.username,
           tcno: values.tcno ?? undefined,
-          phone: values.phone
-        }
-      }
-    })
+          phone: phoneNumber,
+          phone_code: phoneCode,
+        },
+      },
+    });
 
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
-    setLoading(false)
-    setSubmitting(false)
-  }
+    if (error) Alert.alert(error.message);
+    if (!session) Alert.alert('Please check your inbox for email verification!');
+    setLoading(false);
+    setSubmitting(false);
+  };
 
   return (
-    <ScrollView 
+    <ScrollView
       contentContainerStyle={styles.scrollContainer}
       keyboardShouldPersistTaps="handled"
     >
@@ -87,7 +84,7 @@ export default function RegisterScreen() {
             email: 'mustafasansar44@gmail.com',
             password: 'sansar2222',
             phone: '5060909366',
-            tcno: '24242424224'
+            tcno: '24242424224',
           }}
           validationSchema={RegisterSchema}
           onSubmit={handleSignUp}
@@ -102,7 +99,11 @@ export default function RegisterScreen() {
                   onBlur={formikProps.handleBlur('first_name')}
                   value={formikProps.values.first_name}
                   placeholder="First Name"
-                  errorMessage={formikProps.touched.first_name && formikProps.errors.first_name ? formikProps.errors.first_name : undefined}
+                  errorMessage={
+                    formikProps.touched.first_name && formikProps.errors.first_name
+                      ? formikProps.errors.first_name
+                      : undefined
+                  }
                 />
               </View>
               <View style={styles.verticallySpaced}>
@@ -113,7 +114,11 @@ export default function RegisterScreen() {
                   onBlur={formikProps.handleBlur('last_name')}
                   value={formikProps.values.last_name}
                   placeholder="Last Name"
-                  errorMessage={formikProps.touched.last_name && formikProps.errors.last_name ? formikProps.errors.last_name : undefined}
+                  errorMessage={
+                    formikProps.touched.last_name && formikProps.errors.last_name
+                      ? formikProps.errors.last_name
+                      : undefined
+                  }
                 />
               </View>
               <View style={styles.verticallySpaced}>
@@ -124,7 +129,11 @@ export default function RegisterScreen() {
                   onBlur={formikProps.handleBlur('username')}
                   value={formikProps.values.username}
                   placeholder="Username"
-                  errorMessage={formikProps.touched.username && formikProps.errors.username ? formikProps.errors.username : undefined}
+                  errorMessage={
+                    formikProps.touched.username && formikProps.errors.username
+                      ? formikProps.errors.username
+                      : undefined
+                  }
                 />
               </View>
               <View style={styles.verticallySpaced}>
@@ -136,7 +145,11 @@ export default function RegisterScreen() {
                   value={formikProps.values.email}
                   placeholder="email@address.com"
                   autoCapitalize={'none'}
-                  errorMessage={formikProps.touched.email && formikProps.errors.email ? formikProps.errors.email : undefined}
+                  errorMessage={
+                    formikProps.touched.email && formikProps.errors.email
+                      ? formikProps.errors.email
+                      : undefined
+                  }
                 />
               </View>
               <View style={styles.verticallySpaced}>
@@ -149,7 +162,11 @@ export default function RegisterScreen() {
                   secureTextEntry={true}
                   placeholder="Password"
                   autoCapitalize={'none'}
-                  errorMessage={formikProps.touched.password && formikProps.errors.password ? formikProps.errors.password : undefined}
+                  errorMessage={
+                    formikProps.touched.password && formikProps.errors.password
+                      ? formikProps.errors.password
+                      : undefined
+                  }
                 />
               </View>
               <View style={styles.verticallySpaced}>
@@ -159,15 +176,7 @@ export default function RegisterScreen() {
                   initialCountry="tr"
                   style={styles.phoneInput}
                   textStyle={styles.phoneInputText}
-                  onChangePhoneNumber={(number) => {
-                    formikProps.setFieldValue('phone', number)
-                  }}
                 />
-                {formikProps.touched.phone && formikProps.errors.phone && (
-                  <Text style={styles.errorText}>
-                    {formikProps.errors.phone}
-                  </Text>
-                )}
               </View>
               <View style={styles.verticallySpaced}>
                 <Input
@@ -177,13 +186,17 @@ export default function RegisterScreen() {
                   onBlur={formikProps.handleBlur('tcno')}
                   value={formikProps.values.tcno}
                   placeholder="TC No"
-                  errorMessage={formikProps.touched.tcno && formikProps.errors.tcno ? formikProps.errors.tcno : undefined}
+                  errorMessage={
+                    formikProps.touched.tcno && formikProps.errors.tcno
+                      ? formikProps.errors.tcno
+                      : undefined
+                  }
                 />
               </View>
               <View style={styles.verticallySpaced}>
-                <Button 
-                  title="Sign up" 
-                  disabled={loading} 
+                <Button
+                  title="Sign up"
+                  disabled={loading}
                   onPress={() => formikProps.handleSubmit()}
                   buttonStyle={{ marginTop: 10 }}
                 />
@@ -193,7 +206,7 @@ export default function RegisterScreen() {
         </Formik>
       </View>
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -201,42 +214,42 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#f5f5f5',
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   verticallySpaced: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   mt20: {
-    marginTop: 20
+    marginTop: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
   phoneLabel: {
     marginBottom: 5,
     fontSize: 16,
-    color: '#86939e'
+    color: '#86939e',
   },
   phoneInput: {
     borderWidth: 1,
     borderColor: '#86939e',
     borderRadius: 4,
     height: 50,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   phoneInputText: {
-    fontSize: 16
+    fontSize: 16,
   },
   errorText: {
     color: 'red',
     fontSize: 12,
-    marginTop: 5
-  }
-})
+    marginTop: 5,
+  },
+});
