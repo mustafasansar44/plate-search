@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
     View,
     Text,
@@ -14,59 +14,55 @@ import { router } from 'expo-router';
 import { getPlatesByUser } from '@/services/PlateService';
 import { useAuth } from '@/providers/AuthProvider';
 
-
 export const Plates = () => {
-
     const [selectedPlateId, setSelectedPlateId] = useState<string | null>(null);
-    const { plates, removePlate, changePlates } = usePlates()
-    const { session } = useAuth()
+    const { plates, removePlate, changePlates } = usePlates();
+    const { session } = useAuth();
 
     useEffect(() => {
-        getPlates()
-    }, [])
-    
+        getPlates();
+    }, []);
+
     const getPlates = async () => {
-        if(!session) return;
-        const plates = await getPlatesByUser(session?.user.id)
-        changePlates(plates)
-    }
+        if (!session) return;
+        const plates = await getPlatesByUser(session?.user.id);
+        changePlates(plates);
+    };
 
+    const handlePlatePress = useCallback((id: string) => {
+        setSelectedPlateId(prevId => prevId === id ? null : id);
+    }, []);
 
-    const renderItem = ({ item }: { item: Plate }) => {
-        const isSelected = selectedPlateId === item.id;
-
-        const handlePlatePress = () => {
-            setSelectedPlateId(prevId => prevId === item.id ? null : item.id);
-        };
-
-        const handleDelete = () => {
-            Alert.alert(
-                'Plaka Silme',
-                'Plakayı silmek istediğinizden emin misiniz?',
-                [
-                    {
-                        text: 'İptal',
-                        style: 'cancel',
-                        onPress: () => setSelectedPlateId(null)
-                    },
-                    {
-                        text: 'Sil',
-                        style: 'destructive',
-                        onPress: () => {
-                            if (!selectedPlateId) return;
-                            removePlate(selectedPlateId)
-                            setSelectedPlateId(null);
-                        }
+    const handleDelete = useCallback((id: string) => {
+        Alert.alert(
+            'Plaka Silme',
+            'Plakayı silmek istediğinizden emin misiniz?',
+            [
+                {
+                    text: 'İptal',
+                    style: 'cancel',
+                    onPress: () => setSelectedPlateId(null)
+                },
+                {
+                    text: 'Sil',
+                    style: 'destructive',
+                    onPress: () => {
+                        removePlate(id);
+                        setSelectedPlateId(null);
                     }
-                ],
-                { cancelable: false }
-            );
-        };
+                }
+            ],
+            { cancelable: false }
+        );
+    }, [removePlate]);
+
+    const renderItem = useCallback(({ item }: { item: Plate }) => {
+        const isSelected = selectedPlateId === item.id;
 
         return (
             <TouchableOpacity
                 style={styles.plateContainer}
-                onPress={handlePlatePress}
+                onPress={() => handlePlatePress(item.id)}
             >
                 <View style={styles.plateBlueSection} />
                 <View style={styles.plateContent}>
@@ -75,12 +71,12 @@ export const Plates = () => {
                         <Text style={styles.plateStatus}>{item.is_active}</Text>
                         <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
                     </View>
-                </View> 
+                </View>
 
                 {isSelected && (
                     <>
                         <View style={styles.deleteConfirmation}>
-                            <TouchableOpacity onPress={handleDelete}>
+                            <TouchableOpacity onPress={() => handleDelete(item.id)}>
                                 <Text style={styles.deleteText}>Plakayı Sil</Text>
                             </TouchableOpacity>
                         </View>
@@ -93,7 +89,7 @@ export const Plates = () => {
                 )}
             </TouchableOpacity>
         );
-    };
+    }, [selectedPlateId, handlePlatePress, handleDelete]);
 
     return (
         <>
@@ -157,18 +153,6 @@ const styles = StyleSheet.create({
     plateContent: {
         flex: 1,
         marginLeft: 8,
-    },
-    plateHeader: {
-        position: 'absolute',
-        top: -8,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 4,
-        zIndex: 1,
-    },
-    plateHeaderText: {
-        fontSize: 8,
-        color: '#333',
-        fontWeight: 'bold',
     },
     plateNumber: {
         fontSize: 18,

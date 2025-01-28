@@ -56,3 +56,4 @@ veritabanına kaydettiğin alanlardan hangileri hashlenmeli ?
 
 en son tc'yi zorunlu yap ve kontrol et
 google ile giriş
+plate_no unique olmalı

@@ -1,5 +1,6 @@
 import { createPlate, deletePlate } from '@/services/PlateService';
 import { Plate } from '@/types/Plate';
+import { validatePathConfig } from '@react-navigation/native';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface PlateContextType {
@@ -16,7 +17,11 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [plates, setPlates] = useState<Plate[]>([]);
 
     const addPlate = async (newPlate: string, user_id: string) => {
-        const plate = await createPlate(newPlate, user_id)
+
+        const formattedPlate = validatePlate(newPlate);
+        if(formattedPlate === null) return;
+
+        const plate = await createPlate(formattedPlate, user_id)
         setPlates(prevPlates => [...prevPlates, plate]);
     };
 
@@ -26,20 +31,19 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     const validatePlate = (plate_no: string | null) => {
-        if (!plate_no || plate_no.trim().length === 0) {
-            console.warn("Geçersiz plaka. Lütfen plaka bilgisi giriniz.");
+        if (!plate_no || plate_no.trim().length === 0) return null;
+    
+        const formattedPlate = plate_no.replace(/\s+/g, '').toUpperCase();
+    
+        const tr_plate_valid_regex = /^(0[1-9]|[1-7][0-9]|81)[A-Z]{1,3}\d{1,4}$/;
+
+        if (!tr_plate_valid_regex.test(formattedPlate)) {
+            console.warn("Plaka Formatı Hatalı");
             return null;
         }
-
-        const formattedPlate = plate_no.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
-
-        if (!/^[A-Z0-9]{6,8}$/.test(formattedPlate)) {
-            console.warn("Geçersiz plaka formatı. Lütfen geçerli bir plaka giriniz.");
-            return null;
-        }
-
+    
         return formattedPlate;
-    }
+    };
 
     const removePlate = async (id: string) => {
         await deletePlate(id)
