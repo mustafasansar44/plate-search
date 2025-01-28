@@ -16,9 +16,7 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [plates, setPlates] = useState<Plate[]>([]);
 
     const addPlate = async (newPlate: string, user_id: string) => {
-        console.log("SA1")
         const plate = await createPlate(newPlate, user_id)
-        console.log("SA2")
         setPlates(prevPlates => [...prevPlates, plate]);
     };
 

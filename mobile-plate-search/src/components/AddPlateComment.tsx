@@ -1,10 +1,9 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
-import { PlateComment } from '@/types/PlateComment';
 import { useLocalSearchParams } from 'expo-router';
+import { insertPlateComment } from '@/services/PlateService';
 
 
 export default function AddPlateComment() {
@@ -14,13 +13,7 @@ export default function AddPlateComment() {
   const { plate_no } = useLocalSearchParams();
 
   const handleSubmitComment = async () => {
-    let { data, error } = await supabase
-      .rpc('insert_plate_and_insert_plate_comment', { // plate_id, comment_id
-        p_comment: comment,
-        p_comment_owner_user_id: session?.user.id,
-        p_plate_no: plate_no
-      })
-    if (error) console.error(error)
+    const data = await insertPlateComment(comment, session?.user.id, plate_no)
 
     if (data && session) {
       const { first_name, last_name, username, phone } = session.user.user_metadata

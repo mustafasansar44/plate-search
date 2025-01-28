@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -10,12 +10,27 @@ import {
 import { Plate } from '@/types/Plate';
 import AddPlate from './AddPlate';
 import { usePlates } from '@/providers/PlateProvider';
+import { router } from 'expo-router';
+import { getPlatesByUser } from '@/services/PlateService';
+import { useAuth } from '@/providers/AuthProvider';
 
 
 export const Plates = () => {
 
     const [selectedPlateId, setSelectedPlateId] = useState<string | null>(null);
-    const { plates, removePlate } = usePlates()
+    const { plates, removePlate, changePlates } = usePlates()
+    const { session } = useAuth()
+
+    useEffect(() => {
+        getPlates()
+    }, [])
+    
+    const getPlates = async () => {
+        if(!session) return;
+        const plates = await getPlatesByUser(session?.user.id)
+        changePlates(plates)
+    }
+
 
     const renderItem = ({ item }: { item: Plate }) => {
         const isSelected = selectedPlateId === item.id;
@@ -60,14 +75,21 @@ export const Plates = () => {
                         <Text style={styles.plateStatus}>{item.is_active}</Text>
                         <Text style={styles.plateTimestamp}>{item?.created_at?.toLocaleString()}</Text>
                     </View>
-                </View>
+                </View> 
 
                 {isSelected && (
-                    <View style={styles.deleteConfirmation}>
-                        <TouchableOpacity onPress={handleDelete}>
-                            <Text style={styles.deleteText}>Silmek ister misiniz?</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <>
+                        <View style={styles.deleteConfirmation}>
+                            <TouchableOpacity onPress={handleDelete}>
+                                <Text style={styles.deleteText}>Plakayı Sil</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.commentConfirmation}>
+                            <TouchableOpacity onPress={() => router.push(`/${item.plate_no}`)}>
+                                <Text style={styles.deleteText}>Yorumlar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </>
                 )}
             </TouchableOpacity>
         );
@@ -80,7 +102,7 @@ export const Plates = () => {
                 <FlatList
                     data={plates}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.plate_no}
                     ListEmptyComponent={
                         <Text style={styles.emptyText}>Hesaba kayıtlı plaka mevcut değil.</Text>
                     }
@@ -188,7 +210,16 @@ const styles = StyleSheet.create({
         top: 0,
         bottom: 0,
         justifyContent: 'center',
-        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+        backgroundColor: '#7CB342',
+        paddingHorizontal: 15,
+    },
+    commentConfirmation: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        backgroundColor: '#F8E856',
         paddingHorizontal: 15,
     },
     deleteText: {
