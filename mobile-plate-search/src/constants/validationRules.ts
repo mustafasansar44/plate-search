@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const validationRules = {
+export const yupValidationRules = {
   first_name: Yup.string()
     .matches(
       /^[A-Za-zğüşıöçĞÜŞİÖÇ\s-]+$/,
@@ -93,3 +93,12 @@ export const validationRules = {
     )
     .required('Country is required.'),
 };
+
+export const validationRules = {
+
+}
+
+export const plate_regex = {
+  tr: /^(0[1-9]|[1-7][0-9]|81)[A-Z]{1,3}\d{1,4}$/,
+  
+}

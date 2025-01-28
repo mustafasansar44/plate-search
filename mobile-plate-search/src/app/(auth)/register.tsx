@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import PhoneInput from 'react-native-phone-input';
-import { validationRules } from '@/constants/validationRules';
+import { yupValidationRules } from '@/constants/validationRules';
 
 // Type definition for form values
 interface RegisterFormValues {
@@ -20,12 +20,12 @@ interface RegisterFormValues {
 
 // Validation schema
 const RegisterSchema = Yup.object().shape({
-  first_name: validationRules.first_name,
-  last_name: validationRules.last_name,
-  username: validationRules.username,
-  email: validationRules.email,
-  password: validationRules.password,
-  tcno: validationRules.tcno,
+  first_name: yupValidationRules.first_name,
+  last_name: yupValidationRules.last_name,
+  username: yupValidationRules.username,
+  email: yupValidationRules.email,
+  password: yupValidationRules.password,
+  tcno: yupValidationRules.tcno,
 });
 
 export default function RegisterScreen() {

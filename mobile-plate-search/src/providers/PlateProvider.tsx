@@ -1,3 +1,4 @@
+import { plate_regex } from '@/constants/validationRules';
 import { createPlate, deletePlate } from '@/services/PlateService';
 import { Plate } from '@/types/Plate';
 import { validatePathConfig } from '@react-navigation/native';
@@ -35,9 +36,7 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
         const formattedPlate = plate_no.replace(/\s+/g, '').toUpperCase();
     
-        const tr_plate_valid_regex = /^(0[1-9]|[1-7][0-9]|81)[A-Z]{1,3}\d{1,4}$/;
-
-        if (!tr_plate_valid_regex.test(formattedPlate)) {
+        if (!plate_regex.tr.test(formattedPlate)) {
             console.warn("Plaka Formatı Hatalı");
             return null;
         }
