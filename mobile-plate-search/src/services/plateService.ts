@@ -22,7 +22,6 @@ export const createPlate = async (plate_no: string, user_id: string) => {
       p_user_id: user_id
     }).single()
   if (error) console.error(error)
-  else console.log(data)
   return data;
 }
 

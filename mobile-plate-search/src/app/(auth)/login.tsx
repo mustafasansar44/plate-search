@@ -14,13 +14,11 @@ export default function LoginScreen() {
   const { session, loading, setLoading } = useAuth()
 
   async function signIn() {
-    console.log("SASASA")
     setLoading(true)
     const { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     })
-    console.log("SASASA")
     if (error) Alert.alert(error.message)
     setLoading(false)
   }
