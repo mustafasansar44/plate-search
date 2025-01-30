@@ -19,7 +19,7 @@ export default function LoginScreen() {
       email: email,
       password: password,
     })
-    if (error) Alert.alert(error.message)
+    if (error) Alert.alert("Hata", "Böyle bir hesap bulunamadı. Email ve şifrenizi kontrol ediniz.", [{text: "Tamam"}])
     setLoading(false)
   }
 
@@ -39,7 +39,7 @@ export default function LoginScreen() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Password"
+          label="Şifre"
           leftIcon={{ type: 'font-awesome', name: 'lock' }}
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -49,7 +49,7 @@ export default function LoginScreen() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" onPress={() => signIn()} />
+        <Button title="Giriş Yap" onPress={() => signIn()} />
       </View>
     </View>
   )

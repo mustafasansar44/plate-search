@@ -27,7 +27,7 @@ export default function UserLoginLayout() {
 
   const loginScreenOptions = {
     name: "login",
-    title: 'Login',
+    title: 'Giriş Yap',
     tabBarIcon: ({ color }: { color: string }) => (
       <Ionicons name="log-in-outline" size={24} color={color} />
     )
@@ -35,7 +35,7 @@ export default function UserLoginLayout() {
 
   const registerScreenOptions = {
     name: "register",
-    title: 'Register',
+    title: 'Kaydol',
     tabBarIcon: ({ color }: { color: string }) => (
       <Ionicons name="person-add-outline" size={24} color={color} />
     )

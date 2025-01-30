@@ -54,7 +54,6 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const changePlateComments = async (plate_no: string, limit: number = 10, offset: number = 0) => {
     const data = await findPlateWithCommentsAndProfile(plate_no, limit, offset);
-
     if (plateComments.length === 0) {
       setPlateComments(data);
     } else {

@@ -49,6 +49,7 @@ export const deletePlate = async (id: string) => {
 }
 
 export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: number, offset: number): Promise<any | null> => {
+  
   let { data, error } = await supabase
     .rpc('get_plate_comments_with_plate_and_profile', {
       p_limit_count: limit,
@@ -56,9 +57,6 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: n
       p_plate_no: plate_no
     })
   if (error) console.error(error)
-  // LEFT JOIN
-  console.log("SASASA:" + data.comment_owner_user_id)
-  if (data.comment_owner_user_id == null) return []
   return data
 }
 
@@ -69,7 +67,6 @@ export const getRandomPlateCommentsInDB = async (limit: number, offset: number):
     p_offset: offset
   })
 if (error) console.error(error)
-else console.log(data)
   return data
 }
 

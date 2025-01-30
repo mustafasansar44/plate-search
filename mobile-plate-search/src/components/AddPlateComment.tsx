@@ -15,11 +15,11 @@ export default function AddPlateComment() {
 
   const { session } = useAuth()
   const { addPlateComment } = usePlateComments()
-  const { plate_no } = useLocalSearchParams();
+  const { plate_no } = useLocalSearchParams<{ plate_no: string }>();
 
   const handleSubmitComment = async () => {
     if(session){
-      addPlateComment(comment, session, plate_no[0])
+      addPlateComment(comment, session, plate_no)
     }
   };
 

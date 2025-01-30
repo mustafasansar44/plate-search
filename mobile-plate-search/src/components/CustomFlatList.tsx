@@ -1,88 +1,76 @@
-import React, { FC } from 'react';
-import { ReactElement, useCallback, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Easing, FlatListProps, ListRenderItemInfo, FlatList } from 'react-native';
 
 const CustomFlatList = <ItemT,>({
   renderItem: originalRenderItem,
   itemsToFadeIn = 10,
-  initialDelay = 1000, 
+  initialDelay = 1000,
   durationPerItem = 500,
   parallelItems = 1,
   ItemSeparatorComponent,
+  data,
   ...props
 }: FlatListProps<ItemT> & {
   itemsToFadeIn?: number;
   initialDelay?: number;
   durationPerItem?: number;
   parallelItems?: number;
-}): ReactElement => {
-  const value = useRef(new Animated.Value(0));
+}): React.ReactElement => {
+  const animationValues = useRef<Animated.Value[]>([]);
+  const [animatedData, setAnimatedData] = useState<ItemT[]>([]);
+
+  // Update animation values and ensure the list matches
+  useEffect(() => {
+    if (data) {
+      const newValues = data.map((_, index) => animationValues.current[index] || new Animated.Value(0));
+      animationValues.current = newValues;
+      setAnimatedData(data);
+    }
+  }, [data]);
+
+  const fadeInAnimation = useCallback((index: number) => {
+    Animated.timing(animationValues.current[index], {
+      toValue: 1,
+      useNativeDriver: true,
+      duration: durationPerItem,
+      delay: index * durationPerItem,
+      easing: Easing.linear,
+    }).start();
+  }, [durationPerItem]);
+
+  useEffect(() => {
+    animatedData.forEach((_, index) => {
+      if (animationValues.current[index]._value === 0) {
+        fadeInAnimation(index);
+      }
+    });
+  }, [animatedData, fadeInAnimation]);
 
   const FadeInComponent: FC<{ index: number }> = useCallback(
-    ({ index, children }): ReactElement => {
-      const moveBy = (1 - 1 / parallelItems) * index;
-
-      return (
-        <Animated.View
-          style={{
-            opacity: value.current.interpolate({
-              inputRange:
-                index === 0
-                  ? [-1, 0, 1, 2]
-                  : [index - 1 - moveBy, index - moveBy, index + 1 - moveBy, index + 2 - moveBy],
-              outputRange: [0, 0, 1, 1],
-              extrapolate: 'clamp',
-            }),
-          }}>
-          {children}
-        </Animated.View>
-      );
-    },
+    ({ index, children }): React.ReactElement => (
+      <Animated.View
+        style={{
+          opacity: animationValues.current[index] || new Animated.Value(0),
+        }}>
+        {children}
+      </Animated.View>
+    ),
     [],
   );
 
-  const Separator: FC<{ index: number }> = useCallback(({ index }): ReactElement | null => {
-    return ItemSeparatorComponent && index !== undefined ? (
-      <FadeInComponent index={index}>
-        <ItemSeparatorComponent />
-      </FadeInComponent>
-    ) : ItemSeparatorComponent ? (
-      <ItemSeparatorComponent />
-    ) : null;
-  }, []);
-
-  const Item: FC<{ info: ListRenderItemInfo<ItemT> }> = useCallback(({ info }): ReactElement => {
-    useEffect(() => {
-      info.separators.updateProps('leading', { index: info.index });
-    }, []);
-
-    return <FadeInComponent index={info.index}>{originalRenderItem!(info)}</FadeInComponent>;
-  }, []);
-
   const renderItem = useCallback(
-    (info: ListRenderItemInfo<ItemT>): React.ReactElement | null => {
-      return info.index < itemsToFadeIn ? <Item info={info} /> : originalRenderItem!(info);
-    },
-    [originalRenderItem, itemsToFadeIn],
+    (info: ListRenderItemInfo<ItemT>) => (
+      <FadeInComponent index={info.index}>{originalRenderItem!(info)}</FadeInComponent>
+    ),
+    [originalRenderItem],
   );
-
-  useEffect(() => {
-    value.current.setValue(0);
-
-    Animated.timing(value.current, {
-      toValue: itemsToFadeIn + 1,
-      useNativeDriver: true,
-      delay: initialDelay,
-      duration: itemsToFadeIn * durationPerItem,
-      easing: Easing.linear,
-    }).start();
-  }, [initialDelay, durationPerItem, itemsToFadeIn]);
 
   return (
     <FlatList
       {...props}
+      data={animatedData}
       renderItem={renderItem}
-      ItemSeparatorComponent={ItemSeparatorComponent ? Separator : null}
+      ItemSeparatorComponent={ItemSeparatorComponent}
     />
   );
 };
