@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
 import { GetRandomPlateComment } from '@/types/dtos/PlateCommentDetails';
+import CustomFlatList from './CustomFlatList';
 
 export const LastRandomComments = () => {
 
@@ -65,7 +66,7 @@ export const LastRandomComments = () => {
             </View>
 
             {randomLastPlateComments?.length > 0 ? (
-                <FlatList
+                <CustomFlatList
                     data={randomLastPlateComments}
                     renderItem={renderCommentItem}
                     keyExtractor={(item) => item.plate_comment_id}
