@@ -1,14 +1,15 @@
-import { deletePlateComment, deletePlateCommentInDB, updatePlateComment, updatePlateCommentInDB } from '@/services/PlateCommentService';
-import { findPlateWithCommentsAndProfile } from '@/services/PlateService';
-import { PlateCommentDetails } from '@/types/dtos/PlateCommentDetails';
+import { deletePlateCommentInDB, updatePlateCommentInDB } from '@/services/PlateCommentService';
+import { findPlateWithCommentsAndProfile, insertPlateComment } from '@/services/PlateService';
+import { GetPlateComments, PlateCommentDetails } from '@/types/dtos/PlateCommentDetails';
+import { Session } from '@supabase/supabase-js';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 
 
 interface PlateCommentsContextType {
-  plateComments: PlateCommentDetails[];
-  addPlateComment: (plateComment: PlateCommentDetails) => void;
-  changePlateComments: (plate_no: string) => void;
+  plateComments: GetPlateComments[];
+  addPlateComment: (comment: string, session: Session, plate_no: string) => void;
+  changePlateComments: (plate_no: string, range: number, page: number) => void;
   removePlateComment: (id: string) => void;
   updatePlateComment: (id: string, updatedComment: string) => void;
 }
@@ -16,29 +17,60 @@ interface PlateCommentsContextType {
 const PlateCommentsContext = createContext<PlateCommentsContextType | undefined>(undefined);
 
 export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [plateComments, setPlateComments] = useState<PlateCommentDetails[]>([]);
+  const [plateComments, setPlateComments] = useState<GetPlateComments[]>([]);
 
-  const addPlateComment = (plateComment: PlateCommentDetails) => {
-    setPlateComments(prevComments => [...prevComments, plateComment]);
+  const addPlateComment = async (comment: string, session: Session, plate_no: string) => {
+    // TODO: Sonra düzelt. Session parametre almamalı!
+    const data = await insertPlateComment(comment, session?.user?.id, plate_no)
+
+    if (data && session?.user?.id) {
+      const { first_name, last_name, username, phone } = session.user.user_metadata
+      const { comment_id, plate_id } = data[0];
+
+      const plateComment = {
+        comment: comment,
+        comment_id: comment_id,
+        comment_owner_user_id: session?.user.id,
+        created_at: new Date(),
+        first_name: first_name,
+        is_active: true,
+        last_name: last_name,
+        phone: phone,
+        plate_id: plate_id,
+        plate_id_fk: plate_id, // plate_id_fk ile plate_id aynı mı belirgin değil, varsayılan eşitlik verildi
+        plate_no: plate_no,
+        profile_id: session?.user.id,
+        updated_at: new Date().toISOString(),
+        user_id: session?.user.id,
+        username: username
+      };
+      
+      setPlateComments(prevComments => [...prevComments, plateComment]);
+    }
   };
 
-  const changePlateComments = async (plate_no: string) => {
-    const data = await findPlateWithCommentsAndProfile(plate_no);
-    if (!data.plate_comments) return;
-    setPlateComments(data?.plate_comments);
+  const changePlateComments = async (plate_no: string, limit: number = 10, offset: number = 0) => {
+    const data = await findPlateWithCommentsAndProfile(plate_no, limit, offset);
+    console.log(data)
+
+    if (plateComments.length === 0) {
+      setPlateComments(data);
+    } else {
+      setPlateComments((prevComments) => [...prevComments, ...data]);
+    }
   };
 
   const removePlateComment = async (id: string) => {
     await deletePlateCommentInDB(id)
-    setPlateComments(prevComments => prevComments.filter(comment => comment.id !== id));
+    setPlateComments(prevComments => prevComments.filter(comment => comment.comment_id !== id));
   }
 
   const updatePlateComment = async (id: string, updatedComment: string) => {
     await updatePlateCommentInDB(id, updatedComment);
-    
+
     setPlateComments(prevComments =>
       prevComments.map(comment =>
-        comment.id === id ? { ...comment, comment: updatedComment } : comment
+        comment.comment_id === id ? { ...comment, comment: updatedComment } : comment
       )
     );
 

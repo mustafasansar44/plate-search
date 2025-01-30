@@ -1,13 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Stack} from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+import { Stack } from 'expo-router';
 import { CommentDetail } from '@/components/CommentDetail';
 import { PlateCommentsProvider } from '@/providers/PlateCommentsProvider';
 
 export default function UserCommentsScreen() {
 
   return (
-    <View>
+    <View style={styles.container}>
       <Stack.Screen options={{ title: `Plaka Sorgula:` }} />
       <PlateCommentsProvider>
         <CommentDetail />
@@ -15,3 +15,9 @@ export default function UserCommentsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});

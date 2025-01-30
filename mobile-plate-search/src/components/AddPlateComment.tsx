@@ -18,26 +18,8 @@ export default function AddPlateComment() {
   const { plate_no } = useLocalSearchParams();
 
   const handleSubmitComment = async () => {
-    const data = await insertPlateComment(comment, session?.user.id, plate_no)
-
-    if (data && session) {
-      const { first_name, last_name, username, phone } = session.user.user_metadata
-      const { comment_id, plate_id } = data[0];
-
-      addPlateComment({
-        id: comment_id,
-        created_at: new Date(),
-        plate_id: plate_id,
-        comment: comment,
-        comment_owner_user_id: session?.user.id,
-        profiles: {
-          id: session?.user.id,
-          first_name: first_name,
-          last_name: last_name,
-          username: username,
-          phone: phone,
-        }
-      })
+    if(session){
+      addPlateComment(comment, session, plate_no[0])
     }
   };
 
@@ -71,6 +53,7 @@ export default function AddPlateComment() {
 
 const styles = StyleSheet.create({
   container: {
+    height: '30%',
     padding: 16,
   },
   plateTitle: {

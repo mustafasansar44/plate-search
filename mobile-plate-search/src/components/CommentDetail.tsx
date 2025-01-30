@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import AddPlateComment from './AddPlateComment';
@@ -13,13 +13,21 @@ export const CommentDetail = () => {
   const { session } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedComment, setSelectedComment] = useState<{ id: string; comment: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+
+  const [offset , setOffset] = useState(0);
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
-    findPlateComments(plate_no as string);
-  }, []);
+    setLoading(true);
+    changePlateComments(plate_no as string, limit, offset);
+    setLoading(false);
+  }, [offset]);
 
-  const findPlateComments = async (plate_no: string) => {
-    changePlateComments(plate_no);
+
+  const loadMoreData = async () => {
+    setOffset(offset + limit)
   };
 
   const formatDate = (dateString: string) => {
@@ -49,7 +57,7 @@ export const CommentDetail = () => {
         <View style={styles.commentHeader}>
           <View style={styles.userInfoContainer}>
             <Text style={styles.userName}>
-              {item?.profiles?.first_name + " " + item?.profiles?.last_name || 'Anonymous'}
+              {item?.first_name + " " + item?.last_name || 'Anonymous'}
             </Text>
             <Text style={styles.timestamp}>
               {formatDate(item?.created_at)}
@@ -59,13 +67,13 @@ export const CommentDetail = () => {
             <View style={styles.adminActions}>
               <TouchableOpacity
                 style={styles.actionButton}
-                onPress={() => handleEditComment(item.id, item.comment)}
+                onPress={() => handleEditComment(item.comment_id, item.comment)}
               >
                 <Ionicons name="create-outline" size={20} color="#007bff" />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.actionButton}
-                onPress={() => removePlateComment(item?.id)}
+                onPress={() => removePlateComment(item?.comment_id)}
               >
                 <Ionicons name="trash-outline" size={20} color="#dc3545" />
               </TouchableOpacity>
@@ -79,19 +87,41 @@ export const CommentDetail = () => {
     );
   };
 
+  if(loading){
+    return(
+      <View>
+        <Text>Yükleniyor || Loading</Text>
+      </View> 
+    )
+  }
   return (
     <View>
-      <Text style={styles.headerTitle}>Yorumlar</Text>
-      <FlatList
-        data={plateComments}
-        renderItem={renderCommentItem}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
-        }
-        contentContainerStyle={styles.listContainer}
-      />
-      <AddPlateComment />
+      <View style={styles.addPlateComment}>
+        <AddPlateComment />
+      </View>
+
+      <View style={styles.flatListContainer}>
+        <Text style={styles.headerTitle}>Yorumlar</Text>
+
+        <FlatList
+          data={plateComments}
+          renderItem={renderCommentItem}
+          keyExtractor={(item) => item.comment_id}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>Henüz yorum yapılmamış</Text>
+          }
+          contentContainerStyle={styles.listContainer}
+          ListFooterComponent={
+            loading ? (
+              <ActivityIndicator size="large" color="blue" />
+            ) : (
+              <TouchableOpacity onPress={loadMoreData}>
+                <Text>Daha fazla yükle</Text>
+              </TouchableOpacity>
+            )
+          }
+        />
+      </View>
 
       {/* Edit Comment Modal */}
       <EditCommentModal
@@ -104,67 +134,71 @@ export const CommentDetail = () => {
   );
 };
 
-// Styles kısmı aynı kalacak
-
 const styles = StyleSheet.create({
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#333',
-        padding: 16,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e9ecef',
-    },
-    listContainer: {
-        paddingBottom: 16,
-    },
-    commentContainer: {
-        backgroundColor: '#ffffff',
-        borderRadius: 8,
-        padding: 16,
-        marginHorizontal: 16,
-        marginTop: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        elevation: 2,
-    },
-    commentHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    userInfoContainer: {
-        flex: 1,
-    },
-    userName: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#212529',
-    },
-    timestamp: {
-        fontSize: 12,
-        color: '#6c757d',
-        marginTop: 4,
-    },
-    adminActions: {
-        flexDirection: 'row',
-    },
-    actionButton: {
-        marginLeft: 12,
-    },
-    commentText: {
-        fontSize: 14,
-        color: '#343a40',
-        lineHeight: 20,
-    },
-    emptyText: {
-        textAlign: 'center',
-        color: '#6c757d',
-        padding: 16,
-        fontSize: 14,
-    },
+
+  flatListContainer: {
+    height: '70%',
+  },
+  addPlateComment: {
+    height: '30%',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
+  },
+  listContainer: {
+    paddingBottom: 25
+  },
+  commentContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    padding: 16,
+    marginHorizontal: 16,
+    marginTop: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  commentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  userInfoContainer: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#212529',
+  },
+  timestamp: {
+    fontSize: 12,
+    color: '#6c757d',
+    marginTop: 4,
+  },
+  adminActions: {
+    flexDirection: 'row',
+  },
+  actionButton: {
+    marginLeft: 12,
+  },
+  commentText: {
+    fontSize: 14,
+    color: '#343a40',
+    lineHeight: 20,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#6c757d',
+    padding: 16,
+    fontSize: 14,
+  },
 });

@@ -55,7 +55,7 @@ export default function AddPlate() {
                         </View>
                         <TextInput
                             style={styles.plateInput}
-                            placeholder="Plaka Giriniz"
+                            placeholder="Plaka Giriniz (örn: 34ABC123)"
                             value={newPlate}
                             onChangeText={setNewPlate}
                             autoCapitalize="characters"

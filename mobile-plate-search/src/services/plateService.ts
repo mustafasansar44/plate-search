@@ -7,7 +7,10 @@ const PLATES_TABLE = 'plates';
 
 export const getPlatesByUser = async (userId: string): Promise<Plate[]> => {
   const filters = { user_id: userId }; // Filtreleme kriteri
-  const plates = await select(PLATES_TABLE, '*', filters); // BaseService'deki select'i kullanıyoruz
+  const range = 9; // TODO: Düzelt
+  const offset = 0;
+
+  const plates = await select(PLATES_TABLE, '*', filters, false, range, offset); // BaseService'deki select'i kullanıyoruz
   if (!plates) {
     Alert.alert('Error', 'Could not fetch plates');
     return [];
@@ -45,62 +48,28 @@ export const deletePlate = async (id: string) => {
   Alert.alert("Plaka Silindi!")
 }
 
-export const findPlateWithCommentsAndProfile = async (plate_no: string): Promise<any | null> => {
-  const query = `
-          id,
-          plate_no,
-          user_id,
-          plate_comments (
-            id,
-            created_at,
-            updated_at,
-            is_active,
-            plate_id,
-            comment,
-            comment_owner_user_id,
-            profiles (
-                id,
-                first_name,
-                last_name,
-                username,
-                phone
-            )
-          )
-        `
-  const { data, error } = await supabase
-    .from(PLATES_TABLE)
-    .select(query)
-    .eq('plate_no', plate_no)
-    .single();
-
-  if (error) {
-    if (error.details == "The result contains 0 rows") {
-      console.log("Veri yok.")
-      return null
-    }
-
-    console.error('Error fetching plate comments:', error);
-    return null
-  }
-
+export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: number, offset: number): Promise<any | null> => {
+  let { data, error } = await supabase
+    .rpc('get_plate_comments_with_plate_and_profile', {
+      p_limit_count: limit,
+      p_offset_count: offset,
+      p_plate_no: plate_no
+    })
+  if (error) console.error(error)
+    // LEFT JOIN
+  console.log("SASASA:"+data.comment_owner_user_id)
+  if(data.comment_owner_user_id==null) return []
   return data
-
 }
 
-export const insertPlateComment = async (comment, user_id, plate_no) => {
-  console.log("SASASASAASASASAS")
-
+export const insertPlateComment = async (comment: string, user_id: string, plate_no: string) => {
   let { data, error } = await supabase
-  .rpc('insert_plate_and_insert_plate_comment', { // plate_id, comment_id
-    p_comment: comment,
-    p_comment_owner_user_id: user_id,
-    p_plate_no: plate_no
-  })
-  console.log("SASASASAASASASAS")
-  console.log(data)
-  console.log(error)
-  console.log("SASASASAASASASAS")
+    .rpc('insert_plate_and_insert_plate_comment', { // plate_id, comment_id
+      p_comment: comment,
+      p_comment_owner_user_id: user_id,
+      p_plate_no: plate_no
+    })
 
   if (error) console.error(error)
-    return data;
+  return data;
 }

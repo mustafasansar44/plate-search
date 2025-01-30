@@ -36,7 +36,7 @@ export default function PlateSearch() {
       <View style={styles.searchInputContainer}>
         <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
         <TextInput
-          placeholder="Plaka numarasını girin (örn: 34 ABC 123)"
+          placeholder="Plaka numarasını girin (örn: 34ABC123)"
           placeholderTextColor="#888"
           value={searchQuery}
           onChangeText={setSearchQuery}
