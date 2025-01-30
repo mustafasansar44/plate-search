@@ -3,6 +3,7 @@ import { createPlate, deletePlate } from '@/services/PlateService';
 import { Plate } from '@/types/Plate';
 import { validatePathConfig } from '@react-navigation/native';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 
 interface PlateContextType {
     plates: Plate[];
@@ -21,7 +22,10 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         const formattedPlate = validatePlate(newPlate);
         if(formattedPlate === null) return;
-
+        if(plates.length >= 3){
+            Alert.alert('Hata', 'Maksimum 3 plakaya sahip olabilirsin.');
+            return;
+        }
         const plate = await createPlate(formattedPlate, user_id)
         setPlates(prevPlates => [...prevPlates, plate]);
     };

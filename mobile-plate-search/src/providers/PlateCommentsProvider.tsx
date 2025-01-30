@@ -1,23 +1,26 @@
 import { deletePlateCommentInDB, updatePlateCommentInDB } from '@/services/PlateCommentService';
-import { findPlateWithCommentsAndProfile, insertPlateComment } from '@/services/PlateService';
-import { GetPlateComments, PlateCommentDetails } from '@/types/dtos/PlateCommentDetails';
+import { findPlateWithCommentsAndProfile, getRandomPlateCommentsInDB, insertPlateComment } from '@/services/PlateService';
+import { GetPlateComments, GetRandomPlateComment, PlateCommentDetails } from '@/types/dtos/PlateCommentDetails';
 import { Session } from '@supabase/supabase-js';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 
 
 interface PlateCommentsContextType {
+  randomLastPlateComments: GetRandomPlateComment[];
   plateComments: GetPlateComments[];
   addPlateComment: (comment: string, session: Session, plate_no: string) => void;
   changePlateComments: (plate_no: string, range: number, page: number) => void;
   removePlateComment: (id: string) => void;
   updatePlateComment: (id: string, updatedComment: string) => void;
+  getRandomPlateComments: (limit: number, offset: number) => void;
 }
 
 const PlateCommentsContext = createContext<PlateCommentsContextType | undefined>(undefined);
 
 export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [plateComments, setPlateComments] = useState<GetPlateComments[]>([]);
+  const [randomLastPlateComments, setRandomLastPlateComments] = useState<GetRandomPlateComment[]>([]);
 
   const addPlateComment = async (comment: string, session: Session, plate_no: string) => {
     // TODO: Sonra düzelt. Session parametre almamalı!
@@ -51,13 +54,17 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const changePlateComments = async (plate_no: string, limit: number = 10, offset: number = 0) => {
     const data = await findPlateWithCommentsAndProfile(plate_no, limit, offset);
-    console.log(data)
 
     if (plateComments.length === 0) {
       setPlateComments(data);
     } else {
       setPlateComments((prevComments) => [...prevComments, ...data]);
     }
+  };
+
+  const getRandomPlateComments = async (limit: number = 20, offset: number = 0) => {
+    const data = await getRandomPlateCommentsInDB(limit, offset);
+    setRandomLastPlateComments(data);
   };
 
   const removePlateComment = async (id: string) => {
@@ -80,7 +87,10 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
 
 
   return (
-    <PlateCommentsContext.Provider value={{ plateComments, addPlateComment, changePlateComments, removePlateComment, updatePlateComment }}>
+    <PlateCommentsContext.Provider value={{ 
+      plateComments, addPlateComment, changePlateComments, removePlateComment, updatePlateComment, 
+      randomLastPlateComments, getRandomPlateComments 
+    }}>
       {children}
     </PlateCommentsContext.Provider>
   );

@@ -32,3 +32,22 @@ export interface GetPlateComments {
     username: string;
 }
 
+export interface GetRandomPlateComment {
+    id: string;
+    plate_no: string;
+    user_id: string;
+    plate_comment_id: string;
+    plate_comment_created_at: Date;
+    plate_comment_updated_at: Date;
+    plate_comment_is_active: boolean;
+    plate_comment_plate_id: string;
+    plate_comment_comment: string;
+    plate_comment_comment_owner_user_id: string;
+    profile_id: string;
+    profile_first_name: string;
+    profile_last_name: string;
+    profile_username: string;
+    profile_phone: string;
+}
+
+

@@ -56,11 +56,23 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: n
       p_plate_no: plate_no
     })
   if (error) console.error(error)
-    // LEFT JOIN
-  console.log("SASASA:"+data.comment_owner_user_id)
-  if(data.comment_owner_user_id==null) return []
+  // LEFT JOIN
+  console.log("SASASA:" + data.comment_owner_user_id)
+  if (data.comment_owner_user_id == null) return []
   return data
 }
+
+export const getRandomPlateCommentsInDB = async (limit: number, offset: number): Promise<any | null> => {
+  let { data, error } = await supabase
+  .rpc('dene3', {
+    p_limit: limit, 
+    p_offset: offset
+  })
+if (error) console.error(error)
+else console.log(data)
+  return data
+}
+
 
 export const insertPlateComment = async (comment: string, user_id: string, plate_no: string) => {
   let { data, error } = await supabase

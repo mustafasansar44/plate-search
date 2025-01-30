@@ -55,7 +55,8 @@ veritabanına kaydettiğin alanlardan hangileri hashlenmeli ?
 yorumu düzenlenin yanında iptal butonu olmalı!
 plaka formatı hatalı ise kullanıcıyı bilgilendir.
 eğer user.plate >=3 ise ekleme yapamamalı SQL'de ayarla
-
+plate oluşturulduğunda plate_comments oluşturmaya gerek yok fakat böyle bir yapıda plate_comments'leri çekerken null gelecek.
+null constraints'i SQL'de ayarla
 
 en son tc'yi zorunlu yap ve kontrol et
 google ile giriş
