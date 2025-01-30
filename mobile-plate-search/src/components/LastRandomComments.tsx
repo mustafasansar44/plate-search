@@ -41,7 +41,7 @@ export const LastRandomComments = () => {
                     </View>
                     <View style={styles.commentFooter}>
                         <Text style={styles.commentText}>
-                            {item.plate_comment_comment.length > 100
+                            {item?.plate_comment_comment?.length > 100
                                 ? `${item.plate_comment_comment.slice(0, 100)}...`
                                 : item.plate_comment_comment
                             }
@@ -64,7 +64,7 @@ export const LastRandomComments = () => {
                 </TouchableOpacity>
             </View>
 
-            {randomLastPlateComments.length > 0 ? (
+            {randomLastPlateComments?.length > 0 ? (
                 <FlatList
                     data={randomLastPlateComments}
                     renderItem={renderCommentItem}

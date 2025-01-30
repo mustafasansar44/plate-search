@@ -64,7 +64,7 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: n
 
 export const getRandomPlateCommentsInDB = async (limit: number, offset: number): Promise<any | null> => {
   let { data, error } = await supabase
-  .rpc('dene3', {
+  .rpc('get_random_plate_comments_with_plate_and_profile', {
     p_limit: limit, 
     p_offset: offset
   })
