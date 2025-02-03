@@ -8,7 +8,7 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || ""
 const debugMode = process.env.EXPO_PUBLIC_SUPABASE_DEBUG_MODE || false
 
 
-let supabase;
+let supabase: any;
 
 try {
   supabase = createClient(supabaseUrl, supabaseAnonKey, {
