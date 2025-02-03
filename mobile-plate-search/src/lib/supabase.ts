@@ -3,17 +3,28 @@ import 'react-native-url-polyfill/auto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = "https://ntultdpnthcfxjnypnaa.supabase.co/"
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50dWx0ZHBudGhjZnhqbnlwbmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcxMDk1NDQsImV4cCI6MjA1MjY4NTU0NH0.lk7_UewWn9IbRhjCqwjC1CAWqHKyV5-2kYOFk-HIYMo"
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || ""
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || ""
+const debugMode = process.env.EXPO_PUBLIC_SUPABASE_DEBUG_MODE || false
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-})
+
+let supabase;
+
+try {
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      storage: AsyncStorage,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
+  });
+  console.log('Supabase client successfully created.');
+} catch (error) {
+  console.error('Error creating Supabase client:', error);
+}
+
+export { supabase };
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue

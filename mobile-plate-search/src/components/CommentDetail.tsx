@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import AddPlateComment from './AddPlateComment';
@@ -9,14 +9,13 @@ import { EditCommentModal } from './EditCommentModal';
 
 export const CommentDetail = () => {
   const { plate_no } = useLocalSearchParams();
-  const { plateComments, changePlateComments, removePlateComment, updatePlateComment } = usePlateComments();
+  const { plateComments, changePlateComments, removePlateComment, updatePlateComment, hasMoreComments } = usePlateComments();
   const { session } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedComment, setSelectedComment] = useState<{ id: string; comment: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
-
-  const [offset , setOffset] = useState(0);
+  const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
 
   useEffect(() => {
@@ -25,9 +24,12 @@ export const CommentDetail = () => {
     setLoading(false);
   }, [offset]);
 
-
   const loadMoreData = async () => {
-    setOffset(offset + limit)
+    if (!hasMoreComments) {
+      Alert.alert('Daha fazla yorum yok');
+      return;
+    }
+    setOffset(offset + limit);
   };
 
   const formatDate = (dateString: string) => {
@@ -87,16 +89,20 @@ export const CommentDetail = () => {
     );
   };
 
-  if(loading){
-    return(
+  if (loading) {
+    return (
       <View>
         <Text>Yükleniyor || Loading</Text>
-      </View> 
+      </View>
     )
   }
   return (
-    <View>
-      <View style={styles.addPlateComment}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
+      <View style={styles.addPlateCommentContainer}>
         <AddPlateComment />
       </View>
 
@@ -115,9 +121,11 @@ export const CommentDetail = () => {
             loading ? (
               <ActivityIndicator size="large" color="blue" />
             ) : (
-              <TouchableOpacity onPress={loadMoreData}>
-                <Text>Daha fazla yükle</Text>
-              </TouchableOpacity>
+              plateComments.length > 0 && hasMoreComments && (
+                <TouchableOpacity onPress={loadMoreData} style={styles.moreDataButton}>
+                  <Text style={styles.moreDataButtontext}>Daha fazla yükle</Text>
+                </TouchableOpacity>
+              )
             )
           }
         />
@@ -130,17 +138,20 @@ export const CommentDetail = () => {
         onSave={handleSaveComment}
         initialComment={selectedComment?.comment || ''}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-
-  flatListContainer: {
-    height: '70%',
+  container: {
+    flex: 1,
   },
-  addPlateComment: {
-    height: '30%',
+  addPlateCommentContainer: {
+    minHeight: 250,
+    maxHeight: 250,
+  },
+  flatListContainer: {
+    flex: 1,
   },
   headerTitle: {
     fontSize: 18,
@@ -200,5 +211,19 @@ const styles = StyleSheet.create({
     color: '#6c757d',
     padding: 16,
     fontSize: 14,
+  },
+  moreDataButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: 120,
+    height: 35,
+    opacity: .5,
+    borderWidth: 1,
+    marginTop: 16   
+  },
+  moreDataButtontext: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

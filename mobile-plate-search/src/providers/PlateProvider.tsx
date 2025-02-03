@@ -42,6 +42,7 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
         if (!plate_regex.tr.test(formattedPlate)) {
             console.warn("Plaka Formatı Hatalı");
+            Alert.alert('Hata', 'Plaka formatı hatalı');
             return null;
         }
     

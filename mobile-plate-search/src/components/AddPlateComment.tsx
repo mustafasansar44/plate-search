@@ -53,8 +53,8 @@ export default function AddPlateComment() {
 
 const styles = StyleSheet.create({
   container: {
-    height: '30%',
     padding: 16,
+    height: '100%',
   },
   plateTitle: {
     fontSize: 16,
@@ -79,10 +79,10 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
-    opacity: 0.6,
   },
   submitButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    
   }
 });

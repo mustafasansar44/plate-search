@@ -61,3 +61,11 @@ null constraints'i SQL'de ayarla
 en son tc'yi zorunlu yap ve kontrol et
 google ile giriş
 plate_no unique olmalı
+plakayı sildiğimizde eğer son gönderilen yorumlarda varsa kaldırsın. 
+
+ÖNEMLİ
+her kullanıcı günde max 20 yorum yapabilsin.
+telefon no unique
+
+galeri ara
+login olurken önce hata varsa yansıtmalı. Network request failed, mail verification message

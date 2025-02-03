@@ -14,6 +14,7 @@ interface PlateCommentsContextType {
   removePlateComment: (id: string) => void;
   updatePlateComment: (id: string, updatedComment: string) => void;
   getRandomPlateComments: (limit: number, offset: number) => void;
+  hasMoreComments: boolean;
 }
 
 const PlateCommentsContext = createContext<PlateCommentsContextType | undefined>(undefined);
@@ -21,6 +22,7 @@ const PlateCommentsContext = createContext<PlateCommentsContextType | undefined>
 export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [plateComments, setPlateComments] = useState<GetPlateComments[]>([]);
   const [randomLastPlateComments, setRandomLastPlateComments] = useState<GetRandomPlateComment[]>([]);
+  const [hasMoreComments, setHasMoreComments] = useState(true);
 
   const addPlateComment = async (comment: string, session: Session, plate_no: string) => {
     // TODO: Sonra düzelt. Session parametre almamalı!
@@ -53,8 +55,23 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const changePlateComments = async (plate_no: string, limit: number = 10, offset: number = 0) => {
+    if (!hasMoreComments) return;
     const data = await findPlateWithCommentsAndProfile(plate_no, limit, offset);
-    if (plateComments.length === 0) {
+    
+    // todo: Burayı düzelt
+    if(data.length == 1 && !(data[0].first_name || data[0].last_name || data[0].username || data[0].phone)){
+      setPlateComments([]);
+      return
+    }
+
+
+    // If no new comments are returned, set hasMoreComments to false
+    if (data.length === 0) {
+      setHasMoreComments(false);
+      return;
+    }
+
+    if (plateComments.length <= limit) {
       setPlateComments(data);
     } else {
       setPlateComments((prevComments) => [...prevComments, ...data]);
@@ -88,7 +105,7 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <PlateCommentsContext.Provider value={{ 
       plateComments, addPlateComment, changePlateComments, removePlateComment, updatePlateComment, 
-      randomLastPlateComments, getRandomPlateComments 
+      randomLastPlateComments, getRandomPlateComments, hasMoreComments 
     }}>
       {children}
     </PlateCommentsContext.Provider>

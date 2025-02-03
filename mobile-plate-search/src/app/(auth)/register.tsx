@@ -45,6 +45,7 @@ export default function RegisterScreen() {
     const phoneNumber = phoneInputRef.current?.getValue();
     const phoneCode = phoneInputRef.current?.getCountryCode();
 
+    console.log("BITTI1")
     const {
       data: { session },
       error,
@@ -63,8 +64,9 @@ export default function RegisterScreen() {
       },
     });
 
+    console.log("BITTI2")
     if (error) Alert.alert(error.message);
-    if (!session) Alert.alert('Please check your inbox for email verification!');
+    if (!session && !error) Alert.alert('Please check your inbox for email verification!');
     setLoading(false);
     setSubmitting(false);
   };
@@ -81,10 +83,10 @@ export default function RegisterScreen() {
             first_name: 'mustafa',
             last_name: 'sansar',
             username: 'mustafasansar44',
-            email: 'mustafasansar44@gmail.com',
-            password: 'sansar2222',
-            phone: '5060909366',
-            tcno: '24242424224',
+            email: 'mustafa.sansar44@gmail.com',
+            password: 'deneme12',
+            phone: '05555555555',
+            tcno: '',
           }}
           validationSchema={RegisterSchema}
           onSubmit={handleSignUp}
