@@ -9,9 +9,7 @@ import { supabase } from '@/lib/supabase'
 export default function LoginScreen() {
   const [email, setEmail] = useState('mustafasansar44@gmail.com')
   const [password, setPassword] = useState('deneme1')
-  
-  const segment = useSegments();
-  const { isAdmin, session, loading, setLoading } = useAuth()
+  const { setLoading } = useAuth()
 
   async function signIn() {
     setLoading(true)
@@ -20,11 +18,12 @@ export default function LoginScreen() {
       password: password,
     })
 
-    if (error) Alert.alert("Hata", "Böyle bir hesap bulunamadı. Email ve şifrenizi kontrol ediniz.", [{text: "Tamam"}])
+    if (error){
+      Alert.alert("Hata", "Böyle bir hesap bulunamadı. Email ve şifrenizi kontrol ediniz.", [{text: "Tamam"}])
+    }
     else {
       console.warn("Giriş Yapıldı.")
-      if(session && !isAdmin) return <Redirect href="/(user)/(main)" />
-      if(isAdmin) return <Redirect href="/(admin)/(main)" />
+      return <Redirect href="/(user)/(main)" />
     }
   }
 

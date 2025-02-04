@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -16,6 +16,10 @@ export const EditCommentModal: React.FC<EditCommentModalProps> = ({
   initialComment,
 }) => {
   const [comment, setComment] = useState(initialComment);
+
+  useEffect(() => {
+    console.log(initialComment)
+  }, []);
 
   const handleSave = () => {
     onSave(comment);
@@ -40,11 +44,11 @@ export const EditCommentModal: React.FC<EditCommentModalProps> = ({
             placeholder="Yorumunuzu girin..."
           />
           <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+              <Text style={styles.buttonText}>Kaydet</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.buttonText}>İptal</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <Text style={styles.buttonText}>Kaydet</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -85,10 +89,12 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     padding: 10,
-    marginRight: 10,
+    backgroundColor: '#FF5733',
+    borderRadius: 5,
   },
   saveButton: {
     padding: 10,
+    marginRight: 10,
     backgroundColor: '#007bff',
     borderRadius: 5,
   },

@@ -23,6 +23,12 @@ export const Plates = () => {
         getPlates();
     }, []);
 
+    // Reset selected plate when plates change
+    useEffect(() => {
+        setSelectedPlateId(null);
+    }, [plates]);
+
+
     const getPlates = async () => {
         if (!session) return;
         const plates = await getPlatesByUser(session?.user.id);
@@ -47,6 +53,7 @@ export const Plates = () => {
                     text: 'Sil',
                     style: 'destructive',
                     onPress: () => {
+                        console.log("Silinecek id:" + id)
                         removePlate(id);
                         setSelectedPlateId(null);
                     }

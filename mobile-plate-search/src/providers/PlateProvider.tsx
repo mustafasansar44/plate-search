@@ -26,8 +26,14 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             Alert.alert('Hata', 'Maksimum 3 plakaya sahip olabilirsin.');
             return;
         }
+        // TODO: createPlate'den dönen veri direkt formatPlate gibi olmalı!
         const plate = await createPlate(formattedPlate, user_id)
-        setPlates(prevPlates => [...prevPlates, plate]);
+        const updatedPlate = { ...plate, id: plate.plate_id };
+
+        console.log([updatedPlate, ...plates])
+        if(plate != null){
+            setPlates(prevPlates => [updatedPlate, ...prevPlates]);
+        }
     };
 
     const changePlates = (plates: Plate[]) => {

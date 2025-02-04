@@ -25,6 +25,4 @@ export const updatePlateCommentInDB = async (id: string, updatedComment: string)
         Alert.alert('Error', 'Could not update plate comment');
         return;
     }
-
-    Alert.alert("Plaka Yorumu Güncellendi!");
 };

@@ -50,9 +50,17 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
         username: username
       };
       
-      setPlateComments(prevComments => [...prevComments, plateComment]);
+      setPlateComments(prevComments => [plateComment, ...prevComments]);
     }
   };
+
+  const setPlateCommentsAscendingOrder = () => {
+    setPlateComments(prevComments => prevComments.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()));
+  }
+
+  const setPlateCommentsDescendingOrder = () => {
+    setPlateComments(prevComments => prevComments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+  }
 
   const changePlateComments = async (plate_no: string, limit: number = 10, offset: number = 0) => {
     if (!hasMoreComments) return;
@@ -72,9 +80,12 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     if (plateComments.length <= limit) {
-      setPlateComments(data);
+      setPlateComments(data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } else {
-      setPlateComments((prevComments) => [...prevComments, ...data]);
+      setPlateComments((prevComments) => {
+        const newComments = [...prevComments, ...data];
+        return newComments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      });
     }
   };
 

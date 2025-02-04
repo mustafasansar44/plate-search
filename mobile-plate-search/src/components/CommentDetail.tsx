@@ -121,7 +121,7 @@ export const CommentDetail = () => {
             loading ? (
               <ActivityIndicator size="large" color="blue" />
             ) : (
-              plateComments.length > 0 && hasMoreComments && (
+              plateComments.length > 9 && hasMoreComments && (
                 <TouchableOpacity onPress={loadMoreData} style={styles.moreDataButton}>
                   <Text style={styles.moreDataButtontext}>Daha fazla yükle</Text>
                 </TouchableOpacity>

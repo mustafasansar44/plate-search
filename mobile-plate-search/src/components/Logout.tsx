@@ -26,7 +26,7 @@ export default function Logout() {
                     'Çıkış yapmak istediğinizden emin misiniz?',
                     [
                         { text: 'İptal', style: 'cancel' },
-                        { text: 'Çıkış Yap ()', style: 'destructive', onPress: handleLogout }
+                        { text: 'Çıkış Yap', style: 'destructive', onPress: handleLogout }
                     ]
                 );
             }}

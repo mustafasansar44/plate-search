@@ -24,8 +24,11 @@ export const createPlate = async (plate_no: string, user_id: string) => {
       p_plate_no: plate_no,
       p_user_id: user_id
     }).single()
-  if (error) console.error(error)
-  return data;
+  if (error) {
+    Alert.alert("Hata", "Bu plaka başka bir kullanıcıya tanımlı.")
+    return;
+  }
+  return data
 }
 
 export const findPlateByName = async (plate_no: string) => {
@@ -39,6 +42,8 @@ export const findPlateByName = async (plate_no: string) => {
 }
 
 export const deletePlate = async (id: string) => {
+  console.log("deletePlate")
+  console.log(id)
   const { error } = await supabase.from(PLATES_TABLE).delete().eq('id', id)
   if (error) {
     console.error('Error deleting plate:', error);
@@ -49,7 +54,7 @@ export const deletePlate = async (id: string) => {
 }
 
 export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: number, offset: number): Promise<any | null> => {
-  
+
   let { data, error } = await supabase
     .rpc('get_plate_comments_with_plate_and_profile', {
       p_limit_count: limit,
@@ -62,11 +67,11 @@ export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: n
 
 export const getRandomPlateCommentsInDB = async (limit: number, offset: number): Promise<any | null> => {
   let { data, error } = await supabase
-  .rpc('get_random_plate_comments_with_plate_and_profile', {
-    p_limit: limit, 
-    p_offset: offset
-  })
-if (error) console.error(error)
+    .rpc('get_random_plate_comments_with_plate_and_profile', {
+      p_limit: limit,
+      p_offset: offset
+    })
+  if (error) console.error(error)
   return data
 }
 

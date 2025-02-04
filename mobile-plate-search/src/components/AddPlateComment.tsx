@@ -20,6 +20,7 @@ export default function AddPlateComment() {
   const handleSubmitComment = async () => {
     if(session){
       addPlateComment(comment, session, plate_no)
+      setComment("")
     }
   };
 

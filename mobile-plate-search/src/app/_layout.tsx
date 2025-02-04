@@ -1,15 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import React from 'react';
 import { useColorScheme } from '@/components/useColorScheme';
-import { AuthProvider } from '@/providers/AuthProvider';
+import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 import { StatusBar } from 'expo-status-bar';
 import { PlateCommentsProvider } from '@/providers/PlateCommentsProvider';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,15 +54,17 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={DefaultTheme}>
       <AuthProvider>
-        <PlateCommentsProvider>
-          <Stack>
-            <Stack.Screen name="(admin)" options={{ headerShown: false, title: 'Admin Dashboard' }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false, title: 'Login Dashboard' }} />
-            <Stack.Screen name="(user)" options={{ headerShown: false, title: 'User Dashboard' }} />
-            <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Page Not Found' }} />
-          </Stack>
-          <StatusBar style="auto" />
-        </PlateCommentsProvider>
+        <NotificationProvider>
+          <PlateCommentsProvider>
+            <Stack>
+              <Stack.Screen name="(admin)" options={{ headerShown: false, title: 'Admin Dashboard' }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false, title: 'Login Dashboard' }} />
+              <Stack.Screen name="(user)" options={{ headerShown: false, title: 'User Dashboard' }} />
+              <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Page Not Found' }} />
+            </Stack>
+            <StatusBar style="auto" />
+          </PlateCommentsProvider>
+        </NotificationProvider>
       </AuthProvider>
     </ThemeProvider>
   );

@@ -69,3 +69,6 @@ telefon no unique
 
 galeri ara
 login olurken önce hata varsa yansıtmalı. Network request failed, mail verification message
+
+ADMIN'i düzelt
+plate yorumlarını getirirken önce en yenilerini getirmeli

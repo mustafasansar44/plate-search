@@ -1,11 +1,12 @@
 import { Session } from '@supabase/supabase-js';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Redirect } from 'expo-router';
 
 interface AuthContextType {
   session: Session | null;
   loading: boolean;
-  profile: any;
+  profile: any; // TODO: 
   isAdmin: boolean;
   setLoading: (loading: boolean) => void;
 }
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>({
   loading: true,
   profile: null,
   isAdmin: false,
-  setLoading: () => {},
+  setLoading: () => { },
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -29,43 +30,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return data;
   }
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      setLoading(true);
-      try {
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
-        
-        if (currentSession) {
-          const profileData = await getProfile(currentSession.user.id);
-          setProfile(profileData || null);
-          setIsAdmin(profileData?.role === 'ADMIN');
-          setSession(currentSession);
-        } else {
-          setProfile(null);
-          setIsAdmin(false);
-          setSession(null);
-        }
-      } catch (error) {
-        console.error('Error fetching session:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const setUserParamStates = (profile: any, currentSession: Session) => {
+    setProfile(profile);
+    setIsAdmin(profile?.role === 'ADMIN' || false);
+    setSession(currentSession);
+  }
 
+  const fetchSession = async () => {
+    setLoading(true);
+    const { data: { session: currentSession }, error } = await supabase.auth.getSession();
+    if (!currentSession) return null
+    if (error) {
+      console.error(error)
+      return
+    }
+
+    const profileData = await getProfile(currentSession.user.id);
+    setUserParamStates(profileData, currentSession);
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+      console.log("onAuthStateChange")
       if (newSession) {
         const profileData = await getProfile(newSession.user.id);
         setProfile(profileData || null);
         setIsAdmin(profileData?.role === 'ADMIN');
         setSession(newSession);
+        console.log("Profile Güncellendi" + profileData)
       } else {
         setProfile(null);
         setIsAdmin(false);
         setSession(null);
       }
+      if(!profile) return <Redirect href="/(auth)/login" />
     });
+
+
+
+
 
     return () => {
       authListener.subscription.unsubscribe();
