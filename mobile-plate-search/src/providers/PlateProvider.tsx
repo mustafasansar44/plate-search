@@ -30,7 +30,6 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const plate = await createPlate(formattedPlate, user_id)
         const updatedPlate = { ...plate, id: plate.plate_id };
 
-        console.log([updatedPlate, ...plates])
         if(plate != null){
             setPlates(prevPlates => [updatedPlate, ...prevPlates]);
         }

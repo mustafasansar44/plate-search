@@ -42,8 +42,6 @@ export const findPlateByName = async (plate_no: string) => {
 }
 
 export const deletePlate = async (id: string) => {
-  console.log("deletePlate")
-  console.log(id)
   const { error } = await supabase.from(PLATES_TABLE).delete().eq('id', id)
   if (error) {
     console.error('Error deleting plate:', error);

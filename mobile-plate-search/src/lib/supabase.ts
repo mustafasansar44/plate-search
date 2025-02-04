@@ -19,7 +19,7 @@ try {
       detectSessionInUrl: false,
     },
   });
-  console.log('Supabase client successfully created.');
+  console.warn('Supabase client successfully created.');
 } catch (error) {
   console.error('Error creating Supabase client:', error);
 }

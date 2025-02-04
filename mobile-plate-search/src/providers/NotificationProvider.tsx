@@ -33,20 +33,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const { profile } = useAuth()
 
     const updateUserPushNotification = async (user_id: string, token: string | undefined) => {
-
-        console.log("USER / TOKEN")
-        console.log(user_id + " / " + token)
-
         const { data, error } = await supabase
             .from('profiles')
             .update({ push_token: token })
             .eq('id', user_id)
             .eq('push_token', null);
-
         if (error) {
             console.error('Güncelleme hatası:', error);
         } else {
-            console.log('Push token güncellendi.');
+            console.warn('Push token güncellendi.');
         }
     }
 
@@ -91,7 +86,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
+            // console.log(response);
         });
 
         return () => {

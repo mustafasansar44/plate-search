@@ -54,13 +54,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      console.log("onAuthStateChange")
       if (newSession) {
         const profileData = await getProfile(newSession.user.id);
         setProfile(profileData || null);
         setIsAdmin(profileData?.role === 'ADMIN');
         setSession(newSession);
-        console.log("Profile Güncellendi" + profileData)
       } else {
         setProfile(null);
         setIsAdmin(false);
