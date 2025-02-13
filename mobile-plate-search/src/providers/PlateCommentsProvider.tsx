@@ -66,27 +66,22 @@ export const PlateCommentsProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!hasMoreComments) return;
     const data = await findPlateWithCommentsAndProfile(plate_no, limit, offset);
     
-    // todo: Burayı düzelt
-    if(data.length == 1 && !(data[0].first_name || data[0].last_name || data[0].username || data[0].phone)){
-      setPlateComments([]);
-      return
-    }
-
-
     // If no new comments are returned, set hasMoreComments to false
     if (data.length === 0) {
       setHasMoreComments(false);
       return;
     }
 
-    if (plateComments.length <= limit) {
-      setPlateComments(data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
-    } else {
-      setPlateComments((prevComments) => {
-        const newComments = [...prevComments, ...data];
-        return newComments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-      });
-    }
+    // Always accumulate comments and sort by created_at in descending order
+    setPlateComments((prevComments) => {
+      // Create a Set to remove potential duplicates
+      const uniqueComments = new Set([...prevComments, ...data]);
+      
+      // Convert back to array and sort
+      return Array.from(uniqueComments).sort((a, b) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    });
   };
 
   const getRandomPlateComments = async (limit: number = 20, offset: number = 0) => {

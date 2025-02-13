@@ -29,9 +29,7 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // TODO: createPlate'den dönen veri direkt formatPlate gibi olmalı!
         const plate = await createPlate(formattedPlate, user_id)
         if(plate === null) return
-        const updatedPlate = { ...plate, id: plate.plate_id };
-        setPlates(prevPlates => [updatedPlate, ...prevPlates]);
-
+        setPlates(prevPlates => [plate, ...prevPlates]);
     };
 
     const getPlatesByUser = async (user_id: string | undefined) => {
