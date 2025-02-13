@@ -11,29 +11,21 @@ import { Plate } from '@/types/Plate';
 import AddPlate from './AddPlate';
 import { usePlates } from '@/providers/PlateProvider';
 import { router } from 'expo-router';
-import { getPlatesByUser } from '@/services/PlateService';
 import { useAuth } from '@/providers/AuthProvider';
 
 export const Plates = () => {
     const [selectedPlateId, setSelectedPlateId] = useState<string | null>(null);
-    const { plates, removePlate, changePlates } = usePlates();
+    const { plates, removePlate, getPlatesByUser } = usePlates();
     const { session } = useAuth();
 
     useEffect(() => {
-        getPlates();
+        getPlatesByUser(session?.user.id);
     }, []);
 
     // Reset selected plate when plates change
     useEffect(() => {
         setSelectedPlateId(null);
     }, [plates]);
-
-
-    const getPlates = async () => {
-        if (!session) return;
-        const plates = await getPlatesByUser(session?.user.id);
-        changePlates(plates);
-    };
 
     const handlePlatePress = useCallback((id: string) => {
         setSelectedPlateId(prevId => prevId === id ? null : id);
@@ -53,7 +45,6 @@ export const Plates = () => {
                     text: 'Sil',
                     style: 'destructive',
                     onPress: () => {
-                        console.log("Silinecek id:" + id)
                         removePlate(id);
                         setSelectedPlateId(null);
                     }

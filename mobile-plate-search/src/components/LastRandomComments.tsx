@@ -73,7 +73,7 @@ export const LastRandomComments = () => {
 
   return (
     <View style={styles.listSection}>
-      <Text style={styles.subHeader}>Son Gönderilen Yorumlar</Text>
+      <Text style={styles.subHeader}>Diğer kullanıcıların yorumları</Text>
 
       {visibleComments?.length > 0 ? (
         <CustomFlatList

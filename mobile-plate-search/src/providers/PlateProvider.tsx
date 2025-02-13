@@ -1,5 +1,5 @@
 import { plate_regex } from '@/constants/validationRules';
-import { createPlate, deletePlate } from '@/services/PlateService';
+import { createPlate, deletePlate, getPlatesByUser, getPlatesByUserInDb } from '@/services/PlateService';
 import { Plate } from '@/types/Plate';
 import { validatePathConfig } from '@react-navigation/native';
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -8,7 +8,7 @@ import { Alert } from 'react-native';
 interface PlateContextType {
     plates: Plate[];
     addPlate: (newPlate: string, user_id: string) => void;
-    changePlates: (plates: Plate[]) => void;
+    getPlatesByUser: (user_id: string) => void;
     validatePlate: (plate_no: string | null) => string | null;
     removePlate: (plateId: string) => void;
 }
@@ -28,14 +28,16 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
         // TODO: createPlate'den dönen veri direkt formatPlate gibi olmalı!
         const plate = await createPlate(formattedPlate, user_id)
+        if(plate === null) return
         const updatedPlate = { ...plate, id: plate.plate_id };
+        setPlates(prevPlates => [updatedPlate, ...prevPlates]);
 
-        if(plate != null){
-            setPlates(prevPlates => [updatedPlate, ...prevPlates]);
-        }
     };
 
-    const changePlates = (plates: Plate[]) => {
+    const getPlatesByUser = async (user_id: string | undefined) => {
+        // TODO: Session kontrolü yap.
+        if(user_id === undefined) return;
+        let plates = await getPlatesByUserInDb(user_id);
         if (!plates) return;
         setPlates(plates);
     };
@@ -60,7 +62,7 @@ export const PlateProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     return (
-        <PlateContext.Provider value={{ plates, addPlate, changePlates, validatePlate, removePlate }}>
+        <PlateContext.Provider value={{ plates, addPlate, getPlatesByUser, validatePlate, removePlate }}>
             {children}
         </PlateContext.Provider>
     );

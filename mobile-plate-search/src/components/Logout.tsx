@@ -1,8 +1,7 @@
-import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native'
+import { Text, TouchableOpacity, Alert, StyleSheet } from 'react-native'
 import React from 'react'
 import { supabase } from '@/lib/supabase';
-import { router, useRouter } from 'expo-router';
-import { useAuth } from '@/providers/AuthProvider';
+import { useRouter } from 'expo-router';
 
 export default function Logout() {
     const router = useRouter();

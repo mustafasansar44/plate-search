@@ -17,10 +17,6 @@ export const signInWithEmail = async (email: string, password: string) => {
   } catch (err) {
     console.error("Hata oluştu: ", err);
   }
-
-
-
-  
 }
 
 export const registerUser = async (user: UserRegisterDto) => {

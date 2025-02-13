@@ -1,25 +1,4 @@
-STEP 1
-1- Genel bir servis sınıfı yaz. Bu servis sınıfına supabase icin CRUD operasyonları yapmak için yazıyoruz. Daha sonra bu servisi 
-TABLE_NAME, QUERY, EQUAL gibi 
-bu parametrelere göre çağıracağız. Mesela servisin adı DenemeService olsun. 
-
-Yani özetle, genel, dinamik bir supabase CRUD servisi yazmak istiyoruz.
-STEP 1 BİTTİ
-
-
-
-mobile-plate-search projesine admin paneli desteği gelmesi gerekiyor. 
-Admin iken login olduğumuzda bazı ek feature'ler görmek istiyoruz.
-1- Admin, bir plaka aratarak [plate_name].tsx sayfasına girdiğinde, yorumları silebilmeli.
-2- Admin, bir plaka aratarak [plate_name].tsx sayfasına girdiğinde, yorumları güncelleyebilmeli.
-3- Admin, bir user'i banlayabilmeli.
-
-Admin olarak login olduğumuzda background rengi beyaz-gri tonlarında olmalı.
-
-
 // TODO: ImagePicker
-uselocalsearchparam vs global
-link vs .push
 
 TODO: NotFound'u dene
 register olurken loading varken loading'i göster
@@ -72,3 +51,13 @@ login olurken önce hata varsa yansıtmalı. Network request failed, mail verifi
 
 ADMIN'i düzelt
 plate yorumlarını getirirken önce en yenilerini getirmeli
+
+
+
+invalid refresh token error'u düzelt
+plaka eklerken tarih eklenmiyor. DTO'ları düzelt
+
+PLAKA SILINSE BILE YORUMLAR SILINMEMELI
+her şehrin bir plaka rank'ı olabilir.
+plaka yorumu silerken uyarı versin önce direkt silmesin.
+yorum güncellendi * ekle

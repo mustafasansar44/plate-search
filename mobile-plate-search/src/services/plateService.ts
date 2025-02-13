@@ -3,9 +3,9 @@ import { Alert } from "react-native";
 import { select } from "@/services/BaseService";
 import { Plate } from "@/types/Plate";
 
-const PLATES_TABLE = 'plates';
+const PLATES_TABLE = "plates";
 
-export const getPlatesByUser = async (userId: string): Promise<Plate[]> => {
+export const getPlatesByUserInDb = async (userId: string): Promise<Plate[]> => {
   const filters = { user_id: userId }; // Filtreleme kriteri
   const range = 9; // TODO: Düzelt
   const offset = 0;
@@ -24,11 +24,12 @@ export const createPlate = async (plate_no: string, user_id: string) => {
       p_plate_no: plate_no,
       p_user_id: user_id
     }).single()
+
   if (error) {
     Alert.alert("Hata", "Bu plaka başka bir kullanıcıya tanımlı.")
     return;
   }
-  return data
+  return data ?? null
 }
 
 export const findPlateByName = async (plate_no: string) => {
@@ -42,13 +43,16 @@ export const findPlateByName = async (plate_no: string) => {
 }
 
 export const deletePlate = async (id: string) => {
-  const { error } = await supabase.from(PLATES_TABLE).delete().eq('id', id)
-  if (error) {
-    console.error('Error deleting plate:', error);
-    Alert.alert('Error', 'Could not delete plate');
-    return
-  }
-  Alert.alert("Plaka Silindi!")
+  let { data, error } = await supabase
+  .rpc('delete_plate_if_dont_have_plate_comment', {
+    p_plate_id: id
+  })
+if (error){
+  console.error(error)
+  return
+}
+console.warn("Plaka Silindi")
+Alert.alert("Plaka Silindi!")
 }
 
 export const findPlateWithCommentsAndProfile = async (plate_no: string, limit: number, offset: number): Promise<any | null> => {

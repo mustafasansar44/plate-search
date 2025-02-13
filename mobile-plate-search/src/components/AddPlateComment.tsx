@@ -1,9 +1,8 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { useAuth } from '@/providers/AuthProvider';
 import { usePlateComments } from '@/providers/PlateCommentsProvider';
 import { useLocalSearchParams } from 'expo-router';
-import { insertPlateComment } from '@/services/PlateService';
 
 
 export default function AddPlateComment() {

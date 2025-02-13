@@ -45,7 +45,6 @@ export default function RegisterScreen() {
     const phoneNumber = phoneInputRef.current?.getValue();
     const phoneCode = phoneInputRef.current?.getCountryCode();
 
-    console.log("BITTI1")
     const {
       data: { session },
       error,
@@ -64,7 +63,6 @@ export default function RegisterScreen() {
       },
     });
 
-    console.log("BITTI2")
     if (error) Alert.alert(error.message);
     if (!session && !error) Alert.alert('Please check your inbox for email verification!');
     setLoading(false);
@@ -80,12 +78,12 @@ export default function RegisterScreen() {
         <Text style={styles.title}>Create an Account</Text>
         <Formik<RegisterFormValues>
           initialValues={{
-            first_name: 'mustafa',
-            last_name: 'sansar',
-            username: 'mustafasansar44',
-            email: 'mustafa.sansar44@gmail.com',
-            password: 'deneme12',
-            phone: '05555555555',
+            first_name: '',
+            last_name: '',
+            username: '',
+            email: '',
+            password: '',
+            phone: '',
             tcno: '',
           }}
           validationSchema={RegisterSchema}

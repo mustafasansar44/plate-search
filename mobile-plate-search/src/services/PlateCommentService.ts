@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { Alert } from "react-native";
 
-const PLATES_TABLE = 'plate_comments';
+const PLATES_TABLE = "plate_comments";
 
 export const deletePlateCommentInDB = async (id: string) => {
     const { error } = await supabase.from(PLATES_TABLE).delete().eq('id', id)

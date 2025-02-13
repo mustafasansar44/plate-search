@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, StyleSheet, View } from 'react-native'
 import { Button, Input } from '@rneui/themed'
 import { useAuth } from '@/providers/AuthProvider'
-import { signInWithEmail } from '@/services/AuthService'
-import { Redirect, useSegments } from 'expo-router'
+import { Redirect } from 'expo-router'
 import { supabase } from '@/lib/supabase'
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('mustafasansar44@gmail.com')
-  const [password, setPassword] = useState('deneme1')
+  const [email, setEmail] = useState('user1@gmail.com')
+  const [password, setPassword] = useState('password1')
   const { setLoading } = useAuth()
 
   async function signIn() {
@@ -26,8 +25,6 @@ export default function LoginScreen() {
       return <Redirect href="/(user)/(main)" />
     }
   }
-
-
 
   return (
     <View style={styles.container}>
