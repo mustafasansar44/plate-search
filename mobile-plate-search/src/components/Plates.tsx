@@ -55,9 +55,6 @@ export const Plates = () => {
     }, [removePlate]);
 
     const renderItem = useCallback(({ item }: { item: Plate }) => {
-        console.log("selectedPlateId: "+selectedPlateId)
-        console.log("itemId: "+selectedPlateId)
-
         const isSelected = selectedPlateId === item.id;
 
         return (

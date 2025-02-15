@@ -38,7 +38,7 @@ export default function AdminLayout() {
 
   const profileScreenOptions = {
     name: "(profile)",
-    title: 'Profile',
+    title: 'Profil',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => (
       <AntDesign name="profile" size={24} color={color} />

@@ -4,56 +4,56 @@ export const yupValidationRules = {
   first_name: Yup.string()
     .matches(
       /^[A-Za-zğüşıöçĞÜŞİÖÇ\s-]+$/,
-      'First name can only contain letters, spaces, and hyphens.'
+      'Ad sadece harfler ve boşluklar içerebilir.' // tire de içerebiliyor. Düzelt
     )
-    .min(2, 'First name must be at least 2 characters.')
-    .max(16, 'First name must be at most 16 characters.')
-    .required('First name is required.'),
+    .min(2, 'Ad en az 2 karakter olmalıdır.')
+    .max(16, 'Ad en fazla 16 karakter olmalıdır.')
+    .required('Ad alanı zorunludur.'),
 
   last_name: Yup.string()
     .matches(
       /^[A-Za-zğüşıöçĞÜŞİÖÇ\s-]+$/,
-      'Last name can only contain letters, spaces, and hyphens.'
+      'Soyad sadece harfler ve boşluklar içerebilir.' // tire de içerebiliyor. Düzelt
     )
-    .min(2, 'Last name must be at least 2 characters.')
-    .max(16, 'Last name must be at most 16 characters.')
-    .required('Last name is required.'),
+    .min(2, 'Soyad en az 2 karakter olmalıdır.')
+    .max(16, 'Soyad en fazla 16 karakter olmalıdır.')
+    .required('Soyad alanı zorunludur.'),
 
   username: Yup.string()
     .matches(
       /^[A-Za-z0-9_.]+$/,
-      'Username can only contain letters, numbers, underscores, and dots.'
+      'Kullanıcı adı sadece harfler, rakamlar, alt çizgi ve nokta içerebilir.'
     )
-    .min(6, 'Username must be at least 3 characters.')
-    .max(16, 'Username must be at most 16 characters.')
-    .required('Username is required.'),
+    .min(6, 'Kullanıcı adı en az 3 karakter olmalıdır.')
+    .max(16, 'Kullanıcı adı en fazla 16 karakter olmalıdır.')
+    .required('Kullanıcı adı zorunludur.'),
 
   email: Yup.string()
-    .email('Please enter a valid email address.')
-    .max(50, 'Email must be at most 50 characters.')
-    .required('Email is required.'),
+    .email('Lütfen geçerli bir e-posta adresi giriniz.')
+    .max(50, 'E-posta en fazla 50 karakter olmalıdır.')
+    .required('E-posta alanı zorunludur.'),
 
   password: Yup.string()
-    .min(8, 'Password must be at least 8 characters.')
-    .max(16, 'Password must be at most 16 characters.')
-    .required('Password is required.'),
+    .min(8, 'Şifre en az 8 karakter olmalıdır.')
+    .max(16, 'Şifre en fazla 16 karakter olmalıdır.')
+    .required('Şifre alanı zorunludur.'),
 
   tcno: Yup.string()
-    .matches(/^\d{11}$/, 'TC No must be exactly 11 digits.')
-    .nullable(), // Optional field
+    .matches(/^\d{11}$/, 'TC Kimlik No tam olarak 11 rakam olmalıdır.')
+    .nullable(), // İsteğe bağlı alan
 
   phone: Yup.string()
     .matches(
       /^\+?\d{10,15}$/,
-      'Phone number must be between 10 and 15 digits, and can start with a +.'
+      'Telefon numarası 10 ile 15 rakam arasında olmalı ve + ile başlayabilir.'
     )
-    .required('Phone number is required.'),
+    .required('Telefon numarası zorunludur.'),
 
   date_of_birth: Yup.date()
-    .max(new Date(), 'Date of birth cannot be in the future.')
+    .max(new Date(), 'Doğum tarihi gelecekte olamaz.')
     .test(
       'is-adult',
-      'You must be at least 18 years old.',
+      'En az 18 yaşında olmalısınız.',
       (value) => {
         const today = new Date();
         const birthDate = new Date(value);
@@ -68,30 +68,30 @@ export const yupValidationRules = {
         return age >= 18;
       }
     )
-    .required('Date of birth is required.'),
+    .required('Doğum tarihi zorunludur.'),
 
   address: Yup.string()
-    .min(10, 'Address must be at least 10 characters.')
-    .max(100, 'Address must be at most 100 characters.')
-    .required('Address is required.'),
+    .min(10, 'Adres en az 10 karakter olmalıdır.')
+    .max(160, 'Adres en fazla 100 karakter olmalıdır.')
+    .required('Adres alanı zorunludur.'),
 
   city: Yup.string()
     .matches(
       /^[A-Za-zğüşıöçĞÜŞİÖÇ\s]+$/,
-      'City can only contain letters and spaces.'
+      'Şehir sadece harfler ve boşluklar içerebilir.'
     )
-    .required('City is required.'),
+    .required('Şehir alanı zorunludur.'),
 
   postal_code: Yup.string()
-    .matches(/^\d{5}$/, 'Postal code must be exactly 5 digits.')
-    .required('Postal code is required.'),
+    .matches(/^\d{5}$/, 'Posta kodu tam olarak 5 rakam olmalıdır.')
+    .required('Posta kodu zorunludur.'),
 
   country: Yup.string()
     .matches(
       /^[A-Za-zğüşıöçĞÜŞİÖÇ\s]+$/,
-      'Country can only contain letters and spaces.'
+      'Ülke sadece harfler ve boşluklar içerebilir.'
     )
-    .required('Country is required.'),
+    .required('Ülke alanı zorunludur.'),
 };
 
 export const validationRules = {

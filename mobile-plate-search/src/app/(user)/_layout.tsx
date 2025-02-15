@@ -34,7 +34,7 @@ export default function UserLayout() {
 
   const profileScreenOptions = {
     name: "(profile)",
-    title: 'Profile',
+    title: 'Profil',
     headerShown: false,
     tabBarIcon: ({ color }: { color: string }) => (
       <Ionicons name="people-outline" size={20} color={color} />

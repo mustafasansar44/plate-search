@@ -61,3 +61,7 @@ PLAKA SILINSE BILE YORUMLAR SILINMEMELI
 her şehrin bir plaka rank'ı olabilir.
 plaka yorumu silerken uyarı versin önce direkt silmesin.
 yorum güncellendi * ekle
+
+
+// ŞUAN YAP
+login'deki bilgileri sil.
