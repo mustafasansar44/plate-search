@@ -129,7 +129,7 @@ export default function RegisterScreen() {
         </View>
       ) : (
         <View style={styles.container}>
-          <Text style={styles.title}>Create an Account</Text>
+          <Text style={styles.title}>Hesap Oluştur</Text>
           <Formik<RegisterFormValues>
             initialValues={{
               first_name: '',
@@ -252,7 +252,7 @@ export default function RegisterScreen() {
                   <CheckBox
                     title={
                       <Text>
-                        <Text>Kullanım Koşullarını ve Gizlilik Politikasını</Text>
+                        <Text>Kullanım Koşullarını ve Gizlilik Politikasını </Text>
                         <Text style={styles.link} onPress={openTermsAndPrivacyPolicy}>
                           kabul ediyorum.
                         </Text>
