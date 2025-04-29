@@ -1,67 +1,54 @@
-// TODO: ImagePicker
+## 🚘 Plaka Arama Uygulaması  
+**Durum:** ✅ Tamamlandı  
+**Teknolojiler:** Supabase · React Native 
 
-TODO: NotFound'u dene
-register olurken loading varken loading'i göster
-Pagination kullan.
-Dark tema gelmeli!
-Stil düzenlemeleri gelmeli
+### ✨ Özellikler ve Yapılanlar
 
-todo: Kullanıcı kayıt olurken plakayı da kayıt etmeli ya da plakasız kayıt olmalı!
-kullanıcı bilgilerini public yaparsa direkt görünecek, protected yaparsa istek, private yaparsa kimseye görünmemeli.
+#### 🎨 Arayüz ve Kullanıcı Deneyimi
+- ✅ Ana sayfada diğer kullanıcıların yaptığı plaka yorumlar görünebiliyor. plaka veya yorum sayısı 3’ten fazlaysa dikey sürükleme özelliği eklendi.
+- ✅ Plaka yorumları en yeni olacak şekilde sıralandı.
+- ✅ Bir plakaya ait yorum sayısı 20’yi geçerse sayfalama (pagination) eklendi.
 
-login register icon
-anasayfayı az düzelt
-üst tarafta şarj felan çıkmıyor.
-login sonrası index'e yönlendirmemeli! Direkt home sayfasına yönlendir
-Plaka değiştiğinde kişi bilgileri de değişecek. 
-dünyada yorumlanan son 5 plakayı getirt.
-ScreenView gibi yap home'yi
-başta index'ten başlıyor. Onu düzeltdirekt login'e atsın.
-database tarafında mesela username'a constraints'ler ekle
-plakayı aratanlar count
+#### 🔍 Arama ve Veri Görüntüleme
+- ✅ Dünyada en son yorumlanan 3 plaka ana sayfada gösterilecek şekilde getirildi.
+- [ ] Kullanıcıların plaka arama sayısı (count) tutuldu.
 
-Register butonuna basınca loading
-plate'i unique yap
-home sayfasındaki plaka ve yorumlar 3 ten fazla olursa sürüklemeli görelim.  eğer yorumlar 3'ten fazla ise sürükleme olsun.
-plate_no plate_name aynı şey düzelt
+#### 🗃️ Veri Yönetimi ve Kurallar
+- ✅ Bir kullanıcı plaka yorumladığında eğer plaka sistemde kayıtlı değilse, `user_id = null` olacak şekilde otomatik olarak veritabanına eklendi.
+- ✅ Kullanıcı bir plaka eklemeye çalıştığında, o plaka veritabanında varsa ve `user_id = null` ise, ilgili kullanıcı `user_id` olarak atandı.
+- ✅ Kullanıcı kendi plakasını sildiğinde yalnızca `plate.user_id = null` olarak güncellendi. Plaka ve yorumları sistemde kalmaya devam etti.
+- ✅ Bir kullanıcı en fazla 3 plaka ekleyebilecek şekilde SQL seviyesinde kısıtlama getirildi.
 
-login bugunu kontrol et 
-plaka, bir user_id'ye sahip olmak zorunda değil.
-bir user kayıt olduktan sonra plaka eklerken eğer o plaka var ise ve user_id'si yoksa direkt atanabilir
-tüm butonlar, eğer formlar valid değilse disabled
-
-veritabanına kaydettiğin alanlardan hangileri hashlenmeli ?
-yorumu düzenlenin yanında iptal butonu olmalı!
-plaka formatı hatalı ise kullanıcıyı bilgilendir.
-eğer user.plate >=3 ise ekleme yapamamalı SQL'de ayarla
-plate oluşturulduğunda plate_comments oluşturmaya gerek yok fakat böyle bir yapıda plate_comments'leri çekerken null gelecek.
-null constraints'i SQL'de ayarla
-
-en son tc'yi zorunlu yap ve kontrol et
-google ile giriş
-plate_no unique olmalı
-plakayı sildiğimizde eğer son gönderilen yorumlarda varsa kaldırsın. 
-
-ÖNEMLİ
-her kullanıcı günde max 20 yorum yapabilsin.
-telefon no unique
-
-galeri ara
-login olurken önce hata varsa yansıtmalı. Network request failed, mail verification message
-
-ADMIN'i düzelt
-plate yorumlarını getirirken önce en yenilerini getirmeli
+#### 🔐 Kimlik Doğrulama
+- [ ] Google ile giriş özelliği entegre edildi.
 
 
 
-invalid refresh token error'u düzelt
-plaka eklerken tarih eklenmiyor. DTO'ları düzelt
-
-PLAKA SILINSE BILE YORUMLAR SILINMEMELI
-her şehrin bir plaka rank'ı olabilir.
-plaka yorumu silerken uyarı versin önce direkt silmesin.
-yorum güncellendi * ekle
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 
-// ŞUAN YAP
-login'deki bilgileri sil.
+## 🚘 License Plate Lookup App  
+**Status:** ✅ Completed  
+**Technologies:** Supabase · React Native  
+
+### ✨ Features and Completed Tasks
+
+#### 🎨 UI & User Experience
+- ✅ On the home screen, users can view license plate comments made by others. If there are more than 3 plates or comments, vertical scrolling is enabled.
+- ✅ Comments for a license plate are displayed in descending order by creation date (latest first).
+- ✅ Pagination is implemented if a license plate has more than 20 comments.
+
+#### 🔍 Search & Data Display
+- ✅ The 3 most recently commented license plates from around the world are displayed on the home screen.
+- [ ] The number of times a license plate is searched (count) is tracked.
+
+#### 🗃️ Data Management & Business Rules
+- ✅ When a user comments on a plate that does not exist in the database, it is automatically added with `user_id = null`.
+- ✅ When a user adds a plate that already exists in the database with `user_id = null`, the plate is assigned to that user.
+- ✅ When a user deletes their own plate, only the `user_id` field is set to null. The plate and its comments remain visible in the system.
+- ✅ A user can own a maximum of 3 plates. This rule is enforced at the SQL level.
+
+#### 🔐 Authentication
+- [ ] Google Sign-In integration is implemented.
